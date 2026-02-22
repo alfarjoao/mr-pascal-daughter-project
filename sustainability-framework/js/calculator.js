@@ -56,6 +56,7 @@ const resultsSection = document.getElementById('results');
 document.addEventListener('DOMContentLoaded', function() {
     setupEventListeners();
     updateUI();
+    initTabs();
 });
 
 /* ========================================
@@ -368,27 +369,38 @@ function displayResults(results) {
     const decisionBadge = document.getElementById('decisionBadge');
     const decisionText = document.getElementById('decisionText');
     const resultsTitle = document.getElementById('resultsTitle');
-    const resultsSubtitle = document.getElementById('resultsSubtitle');
 
     if (results.decision === 'RENOVATE') {
-        decisionBadge.style.background = 'linear-gradient(135deg, var(--primary), var(--primary-light))';
-        decisionText.textContent = 'RENOVATE';
-        resultsTitle.textContent = 'Renovation is the better choice';
+        if (decisionBadge) {
+            decisionBadge.style.background = 'linear-gradient(135deg, var(--primary), var(--primary-light))';
+        }
+        if (decisionText) {
+            decisionText.textContent = 'RENOVATE';
+        }
+        if (resultsTitle) {
+            resultsTitle.textContent = 'Renovation is the better choice';
+        }
     } else {
-        decisionBadge.style.background = 'linear-gradient(135deg, var(--accent), #ef4444)';
-        decisionText.textContent = 'DEMOLISH & REBUILD';
-        resultsTitle.textContent = 'New build is recommended';
+        if (decisionBadge) {
+            decisionBadge.style.background = 'linear-gradient(135deg, var(--accent), #ef4444)';
+        }
+        if (decisionText) {
+            decisionText.textContent = 'DEMOLISH & REBUILD';
+        }
+        if (resultsTitle) {
+            resultsTitle.textContent = 'New build is recommended';
+        }
     }
 
     // Update subtitle with savings
     const savingsAmount = document.getElementById('savingsAmount');
     const savingsPercent = document.getElementById('savingsPercent');
-    savingsAmount.textContent = formatNumber(results.savings) + ' tCO₂e';
-    savingsPercent.textContent = results.savingsPercent + '%';
-
-    resultsSubtitle.innerHTML = results.decision === 'RENOVATE'
-        ? `Renovating this building will save <strong>${formatNumber(results.savings)} tCO₂e</strong> (<strong>${results.savingsPercent}%</strong>) compared to demolishing and rebuilding.`
-        : `A new build will save <strong>${formatNumber(results.savings)} tCO₂e</strong> (<strong>${results.savingsPercent}%</strong>) compared to renovation.`;
+    if (savingsAmount) {
+        savingsAmount.textContent = formatNumber(results.savings) + ' tCO₂e';
+    }
+    if (savingsPercent) {
+        savingsPercent.textContent = '(' + results.savingsPercent + '%)';
+    }
 
     // Update carbon values with animation
     animateNumber('renovationTotal', 0, results.renovation.totalCarbon, 1500);
@@ -455,6 +467,31 @@ function animateNumber(elementId, start, end, duration) {
 }
 
 /* ========================================
+   TABS FUNCTIONALITY
+   ======================================== */
+function initTabs() {
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabPanes = document.querySelectorAll('.tab-pane');
+    
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetTab = btn.dataset.tab;
+            
+            // Remove active class from all
+            tabBtns.forEach(b => b.classList.remove('active'));
+            tabPanes.forEach(p => p.classList.remove('active'));
+            
+            // Add active class to clicked
+            btn.classList.add('active');
+            const targetPane = document.getElementById(`tab-${targetTab}`);
+            if (targetPane) {
+                targetPane.classList.add('active');
+            }
+        });
+    });
+}
+
+/* ========================================
    ANIMATIONS CSS (inject into page)
    ======================================== */
 const animationStyles = document.createElement('style');
@@ -511,10 +548,7 @@ document.head.appendChild(animationStyles);
 window.calculatorDebug = {
     formData: formData,
     scenarioDefaults: scenarioDefaults,
-    currentStep: () => currentStep,
-    exportPDF: function() {
-        alert('PDF export feature coming soon!');
-    }
+    currentStep: () => currentStep
 };
 
 console.log('✨ Calculator initialized with smooth animations');

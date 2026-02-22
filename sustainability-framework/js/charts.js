@@ -293,7 +293,10 @@ const ChartsModule = {
      */
     createComparisonTable(results) {
         const tbody = document.querySelector('#comparisonTable tbody');
-        if (!tbody) return;
+        if (!tbody) {
+            console.warn('⚠️ Comparison table tbody not found');
+            return;
+        }
 
         // Calculate Light & Deep renovation scenarios
         const light = this.calculateScenario('light', results.inputs);
@@ -326,18 +329,28 @@ const ChartsModule = {
             row.appendChild(nameCell);
 
             // Values for each scenario
-            const values = scenarios.map(s => s.data[metric.key]);
+            const values = scenarios.map(s => {
+                const val = s.data[metric.key];
+                // Handle undefined/null/NaN values
+                return (val !== undefined && val !== null && !isNaN(val)) ? val : 0;
+            });
+            
             const bestValue = metric.lower 
                 ? Math.min(...values) 
                 : Math.max(...values);
 
             scenarios.forEach((scenario, i) => {
                 const cell = document.createElement('td');
-                const value = scenario.data[metric.key];
+                const value = values[i];
                 
-                cell.textContent = value.toLocaleString() + metric.unit;
+                // Format number safely
+                const formattedValue = typeof value === 'number' && !isNaN(value)
+                    ? value.toLocaleString('en-US', { maximumFractionDigits: 1 })
+                    : '0';
                 
-                if (value === bestValue) {
+                cell.textContent = formattedValue + metric.unit;
+                
+                if (value === bestValue && value !== 0) {
                     cell.classList.add('best-value');
                 }
                 
@@ -346,46 +359,94 @@ const ChartsModule = {
 
             tbody.appendChild(row);
         });
+        
+        console.log('✅ Comparison table created');
     },
 
     /**
      * Calculate scenario carbon based on type
      */
     calculateScenario(type, inputs) {
+        // Validate inputs
+        if (!inputs || typeof inputs !== 'object') {
+            console.error('❌ Invalid inputs for scenario calculation');
+            return this.getEmptyScenario();
+        }
+
         const scenarioDefaults = {
             light: { reuseRate: 90, embodiedFactor: 0.15, operationalImprovement: 0.25 },
             deep: { reuseRate: 50, embodiedFactor: 0.50, operationalImprovement: 0.50 }
         };
 
         const scenario = scenarioDefaults[type];
-        const materialFactors = { concrete: 1.0, steel: 1.3, timber: 0.7, masonry: 0.9, mixed: 1.0 };
-        const climateMultipliers = { cold: 1.2, temperate: 1.0, warm: 0.9, hot: 1.1 };
+        if (!scenario) {
+            console.error(`❌ Unknown scenario type: ${type}`);
+            return this.getEmptyScenario();
+        }
 
-        const materialFactor = materialFactors[inputs.material] || 1.0;
-        const climateFactor = climateMultipliers[inputs.climate] || 1.0;
+        const materialFactors = { 
+            concrete: 1.0, 
+            steel: 1.3, 
+            timber: 0.7, 
+            masonry: 0.9, 
+            mixed: 1.0 
+        };
+        
+        const climateMultipliers = { 
+            cold: 1.2, 
+            temperate: 1.0, 
+            warm: 0.9, 
+            hot: 1.1 
+        };
 
+        // Safely get values with defaults
+        const buildingArea = parseFloat(inputs.buildingArea) || 0;
+        const lifespan = parseFloat(inputs.lifespan) || 0;
+        const embodiedEnergy = parseFloat(inputs.embodiedEnergy) || 0;
+        const operationalEnergy = parseFloat(inputs.operationalEnergy) || 0;
+        const material = inputs.material || 'concrete';
+        const climate = inputs.climate || 'temperate';
+
+        const materialFactor = materialFactors[material] || 1.0;
+        const climateFactor = climateMultipliers[climate] || 1.0;
+
+        // Calculate carbon values
         const embodiedCarbon = 
-            inputs.embodiedEnergy * 
-            inputs.buildingArea * 
+            embodiedEnergy * 
+            buildingArea * 
             scenario.embodiedFactor * 
             materialFactor * 
             (1 - scenario.reuseRate / 100);
 
         const operationalCarbon = 
-            inputs.operationalEnergy * 
+            operationalEnergy * 
             (1 - scenario.operationalImprovement) * 
-            inputs.buildingArea * 
+            buildingArea * 
             climateFactor * 
-            inputs.lifespan;
+            lifespan;
 
         const totalCarbon = embodiedCarbon + operationalCarbon;
+        const carbonPerM2 = buildingArea > 0 ? totalCarbon / buildingArea : 0;
 
         return {
             totalCarbon: Math.round(totalCarbon),
             embodiedCarbon: Math.round(embodiedCarbon),
             operationalCarbon: Math.round(operationalCarbon),
             reuseRate: scenario.reuseRate,
-            carbonPerM2: Math.round(totalCarbon / inputs.buildingArea)
+            carbonPerM2: Math.round(carbonPerM2)
+        };
+    },
+
+    /**
+     * Return empty scenario object (fallback)
+     */
+    getEmptyScenario() {
+        return {
+            totalCarbon: 0,
+            embodiedCarbon: 0,
+            operationalCarbon: 0,
+            reuseRate: 0,
+            carbonPerM2: 0
         };
     },
 
