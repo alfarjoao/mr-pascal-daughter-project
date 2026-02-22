@@ -313,182 +313,238 @@
     </section>
 
     <!-- CALCULATOR SECTION -->
-    <section id="calculator" class="calculator-section">
-        <div class="section-container">
-            <div class="section-header">
-                <div class="section-eyebrow">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
-                        <line x1="3" y1="9" x2="21" y2="9" stroke="currentColor" stroke-width="2"/>
-                    </svg>
-                    Carbon Calculator
-                </div>
-                <h2 class="section-title">Start Your Analysis</h2>
-                <p class="section-description">Complete assessment in 3 simple steps</p>
+<section id="calculator" class="calculator-section">
+    <div class="section-container">
+        <div class="section-header">
+            <div class="section-eyebrow">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                    <line x1="3" y1="9" x2="21" y2="9" stroke="currentColor" stroke-width="2"/>
+                </svg>
+                Carbon Calculator
             </div>
-
-            <div class="calculator-card">
-                <form id="calculator-form">
-                    <!-- Step 1: Scenario Selection -->
-                    <div class="form-section active" data-section="1">
-                        <div class="form-section-header">
-                            <h3 class="form-section-title">Select Scenario</h3>
-                            <p class="form-section-description">Choose the intervention strategy</p>
-                        </div>
-
-                        <div class="scenario-grid">
-                            <div class="scenario-card" data-scenario="light-renovation">
-                                <div class="scenario-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
-                                        <path d="M3 9H21" stroke="currentColor" stroke-width="2"/>
-                                    </svg>
-                                </div>
-                                <h3>Light Renovation</h3>
-                                <p>Windows and insulation upgrades. High material reuse.</p>
-                            </div>
-
-                            <div class="scenario-card" data-scenario="deep-renovation">
-                                <div class="scenario-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2"/>
-                                    </svg>
-                                </div>
-                                <h3>Deep Renovation</h3>
-                                <p>Keep façade, rebuild interior. Balanced reuse.</p>
-                            </div>
-
-                            <div class="scenario-card" data-scenario="new-build">
-                                <div class="scenario-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                </div>
-                                <h3>New Build</h3>
-                                <p>Complete reconstruction with modern standards.</p>
-                            </div>
-                        </div>
-
-                        <input type="hidden" id="selected-scenario" name="scenario" required>
-                    </div>
-
-                    <!-- Step 2: Building Data -->
-                    <div class="form-section" data-section="2">
-                        <div class="form-section-header">
-                            <h3 class="form-section-title">Building Data</h3>
-                            <p class="form-section-description">Enter key building characteristics</p>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="building-area">
-                                Building Area <span class="required">*</span>
-                            </label>
-                            <span class="form-help">Total gross floor area</span>
-                            <div class="input-with-unit">
-                                <input type="number" id="building-area" name="buildingArea" class="form-input" placeholder="e.g., 1000" min="50" step="1" required>
-                                <div class="input-unit">m²</div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="lifespan">
-                                Expected Lifespan <span class="required">*</span>
-                            </label>
-                            <span class="form-help">Operational lifespan after intervention</span>
-                            <div class="input-with-unit">
-                                <input type="number" id="lifespan" name="lifespan" class="form-input" placeholder="e.g., 50" min="10" max="100" step="1" required>
-                                <div class="input-unit">years</div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="structural-material">
-                                Structural Material <span class="required">*</span>
-                            </label>
-                            <select id="structural-material" name="structuralMaterial" class="form-select" required>
-                                <option value="">Select material...</option>
-                                <option value="concrete">Concrete</option>
-                                <option value="steel">Steel</option>
-                                <option value="timber">Timber</option>
-                                <option value="masonry">Masonry</option>
-                                <option value="mixed">Mixed</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="climate-zone">
-                                Climate Zone <span class="required">*</span>
-                            </label>
-                            <select id="climate-zone" name="climateZone" class="form-select" required>
-                                <option value="">Select climate...</option>
-                                <option value="cold">Cold</option>
-                                <option value="temperate">Temperate</option>
-                                <option value="warm">Warm</option>
-                                <option value="hot">Hot</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Step 3: Energy Data -->
-                    <div class="form-section" data-section="3">
-                        <div class="form-section-header">
-                            <h3 class="form-section-title">Energy Data</h3>
-                            <p class="form-section-description">Provide energy performance</p>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="embodied-energy">
-                                Embodied Energy Factor <span class="required">*</span>
-                            </label>
-                            <span class="form-help">Typical range: 200-800 kgCO₂/m²</span>
-                            <div class="input-with-unit">
-                                <input type="number" id="embodied-energy" name="embodiedEnergy" class="form-input" placeholder="e.g., 400" min="50" step="1" required>
-                                <div class="input-unit">kgCO₂/m²</div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="operational-energy">
-                                Operational Energy <span class="required">*</span>
-                            </label>
-                            <span class="form-help">Annual consumption (50-300 kWh/m²/yr)</span>
-                            <div class="input-with-unit">
-                                <input type="number" id="operational-energy" name="operationalEnergy" class="form-input" placeholder="e.g., 150" min="10" step="1" required>
-                                <div class="input-unit">kWh/m²/yr</div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="reuse-rate">
-                                Material Reuse Rate (Optional)
-                            </label>
-                            <span class="form-help">Leave blank for scenario default</span>
-                            <div class="input-with-unit">
-                                <input type="number" id="reuse-rate" name="reuseRate" class="form-input" placeholder="e.g., 50" min="0" max="100" step="1">
-                                <div class="input-unit">%</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Navigation -->
-                    <div class="form-navigation">
-                        <button type="button" class="btn btn-secondary" id="btn-back" style="display: none;">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            Back
-                        </button>
-                        <button type="button" class="btn btn-primary" id="btn-next">
-                            Next Step
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </button>
-                    </div>
-                </form>
-            </div>
+            <h2 class="section-title">Start Your Analysis</h2>
+            <p class="section-description">Complete assessment in 3 simple steps</p>
         </div>
-    </section>
+
+        <div class="calculator-card">
+            <form id="calculator-form">
+                <!-- Step 1: Scenario Selection -->
+                <div class="form-section active" data-section="1">
+                    <div class="form-section-header">
+                        <h3 class="form-section-title">Select Scenario <span class="required-asterisk">*</span></h3>
+                        <p class="form-section-description">Choose the intervention strategy</p>
+                    </div>
+
+                    <div class="scenario-grid">
+                        <div class="scenario-card" data-scenario="light-renovation">
+                            <div class="scenario-icon">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M3 9H21" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <h3>Light Renovation</h3>
+                            <p>Windows and insulation upgrades. High material reuse.</p>
+                        </div>
+
+                        <div class="scenario-card" data-scenario="deep-renovation">
+                            <div class="scenario-icon">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <h3>Deep Renovation</h3>
+                            <p>Keep façade, rebuild interior. Balanced reuse.</p>
+                        </div>
+
+                        <div class="scenario-card" data-scenario="new-build">
+                            <div class="scenario-icon">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <h3>New Build</h3>
+                            <p>Complete reconstruction with modern standards.</p>
+                        </div>
+                    </div>
+
+                    <input type="hidden" id="selected-scenario" name="scenario" required>
+                </div>
+
+                <!-- Step 2: Building Data -->
+                <div class="form-section" data-section="2">
+                    <div class="form-section-header">
+                        <h3 class="form-section-title">Building Data</h3>
+                        <p class="form-section-description">Enter key building characteristics</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="building-area">
+                            Building Area <span class="required-asterisk">*</span>
+                        </label>
+                        <span class="form-help">Total gross floor area (50–100,000 m²)</span>
+                        <div class="input-with-unit">
+                            <input 
+                                type="number" 
+                                id="building-area" 
+                                name="buildingArea" 
+                                class="form-input" 
+                                placeholder="e.g., 1000" 
+                                min="50" 
+                                max="100000" 
+                                step="1" 
+                                required
+                            >
+                            <div class="input-unit">m²</div>
+                        </div>
+                        <span class="input-error-message"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="lifespan">
+                            Expected Lifespan <span class="required-asterisk">*</span>
+                        </label>
+                        <span class="form-help">Operational lifespan after intervention (10–100 years)</span>
+                        <div class="input-with-unit">
+                            <input 
+                                type="number" 
+                                id="lifespan" 
+                                name="lifespan" 
+                                class="form-input" 
+                                placeholder="e.g., 50" 
+                                min="10" 
+                                max="100" 
+                                step="1" 
+                                required
+                            >
+                            <div class="input-unit">years</div>
+                        </div>
+                        <span class="input-error-message"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="structural-material">
+                            Structural Material <span class="required-asterisk">*</span>
+                        </label>
+                        <select id="structural-material" name="structuralMaterial" class="form-select" required>
+                            <option value="">Select material...</option>
+                            <option value="concrete">Concrete</option>
+                            <option value="steel">Steel</option>
+                            <option value="timber">Timber</option>
+                            <option value="masonry">Masonry</option>
+                            <option value="mixed">Mixed</option>
+                        </select>
+                        <span class="input-error-message"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="climate-zone">
+                            Climate Zone <span class="required-asterisk">*</span>
+                        </label>
+                        <select id="climate-zone" name="climateZone" class="form-select" required>
+                            <option value="">Select climate...</option>
+                            <option value="cold">Cold</option>
+                            <option value="temperate">Temperate</option>
+                            <option value="warm">Warm</option>
+                            <option value="hot">Hot</option>
+                        </select>
+                        <span class="input-error-message"></span>
+                    </div>
+                </div>
+
+                <!-- Step 3: Energy Data -->
+                <div class="form-section" data-section="3">
+                    <div class="form-section-header">
+                        <h3 class="form-section-title">Energy Data</h3>
+                        <p class="form-section-description">Provide energy performance</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="embodied-energy">
+                            Embodied Energy Factor <span class="required-asterisk">*</span>
+                        </label>
+                        <span class="form-help">Typical range: 200-800 kgCO₂/m²</span>
+                        <div class="input-with-unit">
+                            <input 
+                                type="number" 
+                                id="embodied-energy" 
+                                name="embodiedEnergy" 
+                                class="form-input" 
+                                placeholder="e.g., 400" 
+                                min="50" 
+                                max="5000" 
+                                step="1" 
+                                required
+                            >
+                            <div class="input-unit">kgCO₂/m²</div>
+                        </div>
+                        <span class="input-error-message"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="operational-energy">
+                            Operational Energy <span class="required-asterisk">*</span>
+                        </label>
+                        <span class="form-help">Annual consumption (10-500 kWh/m²/yr)</span>
+                        <div class="input-with-unit">
+                            <input 
+                                type="number" 
+                                id="operational-energy" 
+                                name="operationalEnergy" 
+                                class="form-input" 
+                                placeholder="e.g., 150" 
+                                min="10" 
+                                max="500" 
+                                step="1" 
+                                required
+                            >
+                            <div class="input-unit">kWh/m²/yr</div>
+                        </div>
+                        <span class="input-error-message"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="reuse-rate">
+                            Material Reuse Rate (Optional)
+                        </label>
+                        <span class="form-help">Leave blank for scenario default (0-100%)</span>
+                        <div class="input-with-unit">
+                            <input 
+                                type="number" 
+                                id="reuse-rate" 
+                                name="reuseRate" 
+                                class="form-input" 
+                                placeholder="e.g., 50" 
+                                min="0" 
+                                max="100" 
+                                step="1"
+                            >
+                            <div class="input-unit">%</div>
+                        </div>
+                        <span class="input-error-message"></span>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="form-navigation">
+                    <button type="button" class="btn btn-secondary" id="btn-back" style="display: none;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Back
+                    </button>
+                    <button type="button" class="btn btn-primary" id="btn-next">
+                        Next Step
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
 
     <!-- Results Section (COMPACT DESIGN) -->
     <section id="results" style="display: none;">

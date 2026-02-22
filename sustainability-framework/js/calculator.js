@@ -1,6 +1,6 @@
 /* ========================================
    BUILDING SUSTAINABILITY FRAMEWORK
-   Calculator Logic - Enhanced with smooth animations
+   Calculator Logic - Enhanced with Real-Time Validation
    ======================================== */
 
 // State Management
@@ -44,6 +44,15 @@ const climateMultipliers = {
     'hot': 1.1
 };
 
+// Validation Rules
+const validationRules = {
+    'buildingArea': { min: 50, max: 100000, message: 'Area must be between 50 and 100,000 m²' },
+    'lifespan': { min: 10, max: 100, message: 'Lifespan must be between 10 and 100 years' },
+    'embodiedEnergy': { min: 50, max: 5000, message: 'Embodied energy must be between 50 and 5,000 kgCO₂/m²' },
+    'operationalEnergy': { min: 10, max: 500, message: 'Operational energy must be between 10 and 500 kWh/m²/yr' },
+    'reuseRate': { min: 0, max: 100, message: 'Reuse rate must be between 0 and 100%' }
+};
+
 // DOM Elements
 const form = document.getElementById('calculator-form');
 const btnNext = document.getElementById('btn-next');
@@ -74,15 +83,83 @@ function setupEventListeners() {
     btnNext.addEventListener('click', handleNext);
     btnBack.addEventListener('click', handleBack);
 
-    // Form inputs - store data on change
-    const inputs = form.querySelectorAll('input, select');
+    // Real-time validation on inputs
+    const inputs = form.querySelectorAll('input[type="number"], select');
     inputs.forEach(input => {
+        // Validate on blur (when user leaves field)
+        input.addEventListener('blur', function() {
+            validateInput(this);
+        });
+        
+        // Validate on input (while typing)
+        input.addEventListener('input', function() {
+            if (this.value) {
+                validateInput(this);
+            }
+        });
+        
+        // Store data on change
         input.addEventListener('change', function() {
             if (this.value) {
                 formData[this.name] = this.value;
             }
         });
     });
+}
+
+/* ========================================
+   REAL-TIME VALIDATION
+   ======================================== */
+function validateInput(input) {
+    const name = input.name;
+    const value = parseFloat(input.value);
+    const parentGroup = input.closest('.form-group');
+    const errorMessage = parentGroup ? parentGroup.querySelector('.input-error-message') : null;
+    
+    // Clear previous state
+    input.classList.remove('input-valid', 'input-invalid');
+    if (errorMessage) errorMessage.textContent = '';
+    
+    // Check if required and empty
+    if (input.hasAttribute('required') && !input.value.trim()) {
+        input.classList.add('input-invalid');
+        if (errorMessage) {
+            errorMessage.textContent = 'This field is required';
+            errorMessage.style.display = 'block';
+        }
+        return false;
+    }
+    
+    // Check against validation rules
+    if (validationRules[name] && input.value) {
+        const rule = validationRules[name];
+        
+        if (isNaN(value)) {
+            input.classList.add('input-invalid');
+            if (errorMessage) {
+                errorMessage.textContent = 'Please enter a valid number';
+                errorMessage.style.display = 'block';
+            }
+            return false;
+        }
+        
+        if (value < rule.min || value > rule.max) {
+            input.classList.add('input-invalid');
+            if (errorMessage) {
+                errorMessage.textContent = rule.message;
+                errorMessage.style.display = 'block';
+            }
+            return false;
+        }
+    }
+    
+    // Validation passed
+    if (input.value.trim()) {
+        input.classList.add('input-valid');
+        if (errorMessage) errorMessage.style.display = 'none';
+    }
+    
+    return true;
 }
 
 /* ========================================
@@ -138,56 +215,73 @@ function handleBack() {
 }
 
 /* ========================================
-   VALIDATION
+   STEP VALIDATION
    ======================================== */
 function validateCurrentStep() {
     const currentSection = document.querySelector(`.form-section[data-section="${currentStep}"]`);
     const requiredInputs = currentSection.querySelectorAll('[required]');
     let isValid = true;
+    let firstInvalidInput = null;
 
     requiredInputs.forEach(input => {
-        if (!input.value.trim()) {
+        const inputValid = validateInput(input);
+        
+        if (!inputValid) {
             isValid = false;
-            // Smooth error animation
-            input.style.borderColor = 'var(--error)';
-            input.style.animation = 'shake 0.3s ease-in-out';
+            if (!firstInvalidInput) {
+                firstInvalidInput = input;
+            }
+            
+            // Shake animation for invalid inputs
+            input.style.animation = 'shake 0.4s ease-in-out';
             setTimeout(() => {
                 input.style.animation = '';
-            }, 300);
-        } else {
-            input.style.borderColor = 'var(--border)';
+            }, 400);
         }
     });
 
     if (!isValid) {
-        // Show error message with fade-in
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'validation-error';
-        errorDiv.textContent = 'Please fill in all required fields';
-        errorDiv.style.cssText = `
-            position: fixed;
-            top: 100px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--error);
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 8px;
-            font-weight: 600;
-            z-index: 9999;
-            animation: slideDown 0.3s ease-out;
-            box-shadow: 0 10px 40px rgba(239, 68, 68, 0.3);
-        `;
+        // Scroll to first invalid input
+        if (firstInvalidInput) {
+            firstInvalidInput.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center' 
+            });
+            firstInvalidInput.focus();
+        }
         
-        document.body.appendChild(errorDiv);
-        
-        setTimeout(() => {
-            errorDiv.style.animation = 'slideUp 0.3s ease-out';
-            setTimeout(() => errorDiv.remove(), 300);
-        }, 2000);
+        // Show error notification
+        showErrorNotification('Please correct the highlighted fields before continuing');
     }
 
     return isValid;
+}
+
+/* ========================================
+   ERROR NOTIFICATION
+   ======================================== */
+function showErrorNotification(message) {
+    // Remove existing notification
+    const existing = document.querySelector('.validation-notification');
+    if (existing) existing.remove();
+    
+    const notification = document.createElement('div');
+    notification.className = 'validation-notification';
+    notification.innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 8V12M12 16H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>${message}</span>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Auto-remove after 4 seconds
+    setTimeout(() => {
+        notification.style.animation = 'slideOutRight 0.3s ease-out';
+        setTimeout(() => notification.remove(), 300);
+    }, 4000);
 }
 
 /* ========================================
@@ -498,29 +592,29 @@ const animationStyles = document.createElement('style');
 animationStyles.textContent = `
     @keyframes shake {
         0%, 100% { transform: translateX(0); }
-        25% { transform: translateX(-10px); }
-        75% { transform: translateX(10px); }
+        10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
+        20%, 40%, 60%, 80% { transform: translateX(8px); }
     }
     
-    @keyframes slideDown {
+    @keyframes slideInRight {
         from {
             opacity: 0;
-            transform: translate(-50%, -20px);
+            transform: translateX(100px);
         }
         to {
             opacity: 1;
-            transform: translate(-50%, 0);
+            transform: translateX(0);
         }
     }
     
-    @keyframes slideUp {
+    @keyframes slideOutRight {
         from {
             opacity: 1;
-            transform: translate(-50%, 0);
+            transform: translateX(0);
         }
         to {
             opacity: 0;
-            transform: translate(-50%, -20px);
+            transform: translateX(100px);
         }
     }
     
@@ -528,16 +622,79 @@ animationStyles.textContent = `
         to { transform: rotate(360deg); }
     }
     
+    /* Form Section Transitions */
     .form-section {
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
+    /* Button Transitions */
     .btn {
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
+    /* Scenario Card Transitions */
     .scenario-card {
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    /* Input States */
+    .form-input.input-valid,
+    .form-select.input-valid {
+        border-color: #10b981 !important;
+        background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M9 12L11 14L15 10' stroke='%2310b981' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='12' cy='12' r='10' stroke='%2310b981' stroke-width='2'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 20px;
+        padding-right: 40px;
+    }
+    
+    .form-input.input-invalid,
+    .form-select.input-invalid {
+        border-color: #ef4444 !important;
+        background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='10' stroke='%23ef4444' stroke-width='2'/%3E%3Cpath d='M12 8V12M12 16H12.01' stroke='%23ef4444' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 20px;
+        padding-right: 40px;
+    }
+    
+    /* Error Messages */
+    .input-error-message {
+        display: none;
+        color: #ef4444;
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+        font-weight: 500;
+    }
+    
+    /* Required Asterisk */
+    .required-asterisk {
+        color: #ef4444;
+        font-weight: 700;
+        margin-left: 2px;
+    }
+    
+    /* Validation Notification */
+    .validation-notification {
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        background: #ef4444;
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        font-weight: 600;
+        z-index: 9999;
+        animation: slideInRight 0.3s ease-out;
+        box-shadow: 0 10px 40px rgba(239, 68, 68, 0.3);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        max-width: 400px;
+    }
+    
+    .validation-notification svg {
+        flex-shrink: 0;
     }
 `;
 document.head.appendChild(animationStyles);
@@ -548,7 +705,8 @@ document.head.appendChild(animationStyles);
 window.calculatorDebug = {
     formData: formData,
     scenarioDefaults: scenarioDefaults,
-    currentStep: () => currentStep
+    currentStep: () => currentStep,
+    validate: () => validateCurrentStep()
 };
 
-console.log('✨ Calculator initialized with smooth animations');
+console.log('✨ Calculator initialized with real-time validation');
