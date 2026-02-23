@@ -117,11 +117,11 @@ async function generatePDF() {
         pdf.text(renovationTotal + ' tCO₂e', margin + 5, 140);
 
         // New Build box
-        pdf.setFillColor(254, 226, 226); // Light red
-        pdf.setDrawColor(220, 38, 38); // Dark red border
+        pdf.setFillColor(224, 242, 254); // Light blue
+        pdf.setDrawColor(14, 165, 233); // Blue border
         pdf.roundedRect(margin + (contentWidth / 2) + 5, 120, (contentWidth / 2) - 5, 30, 2, 2, 'FD');
         
-        pdf.setTextColor(220, 38, 38);
+        pdf.setTextColor(14, 165, 233);
         pdf.text('Best New Build', margin + (contentWidth / 2) + 10, 128);
         
         pdf.setFontSize(18);
@@ -180,7 +180,7 @@ async function generatePDF() {
                 const tableTab = document.querySelector('[data-tab="table"]');
                 if (tableTab) tableTab.click();
                 
-                await new Promise(resolve => setTimeout(resolve, 300));
+                await new Promise(resolve => setTimeout(resolve, 400));
                 
                 const canvas = await html2canvas(tableElement, {
                     scale: 2,
@@ -244,7 +244,7 @@ async function generatePDF() {
                 const comparisonTab = document.querySelector('[data-tab="comparison"]');
                 if (comparisonTab) comparisonTab.click();
                 
-                await new Promise(resolve => setTimeout(resolve, 300));
+                await new Promise(resolve => setTimeout(resolve, 400));
                 
                 const canvas = await html2canvas(barChartElement.parentElement, {
                     scale: 2,
@@ -256,7 +256,7 @@ async function generatePDF() {
                 const imgWidth = contentWidth;
                 const imgHeight = (canvas.height * imgWidth) / canvas.width;
                 
-                pdf.addImage(imgData, 'PNG', margin, 40, imgWidth, imgHeight);
+                pdf.addImage(imgData, 'PNG', margin, 40, imgWidth, Math.min(imgHeight, 110));
                 
             } catch (error) {
                 console.error('Error capturing bar chart:', error);
@@ -271,7 +271,7 @@ async function generatePDF() {
                 const breakdownTab = document.querySelector('[data-tab="breakdown"]');
                 if (breakdownTab) breakdownTab.click();
                 
-                await new Promise(resolve => setTimeout(resolve, 300));
+                await new Promise(resolve => setTimeout(resolve, 400));
                 
                 const canvas = await html2canvas(pieChartElement.parentElement, {
                     scale: 2,
@@ -283,7 +283,7 @@ async function generatePDF() {
                 const imgWidth = contentWidth;
                 const imgHeight = (canvas.height * imgWidth) / canvas.width;
                 
-                pdf.addImage(imgData, 'PNG', margin, 160, imgWidth, imgHeight);
+                pdf.addImage(imgData, 'PNG', margin, 160, imgWidth, Math.min(imgHeight, 110));
                 
             } catch (error) {
                 console.error('Error capturing pie chart:', error);
@@ -318,7 +318,7 @@ async function generatePDF() {
                 const timelineTab = document.querySelector('[data-tab="timeline"]');
                 if (timelineTab) timelineTab.click();
                 
-                await new Promise(resolve => setTimeout(resolve, 300));
+                await new Promise(resolve => setTimeout(resolve, 400));
                 
                 const canvas = await html2canvas(lineChartElement.parentElement, {
                     scale: 2,
@@ -330,7 +330,7 @@ async function generatePDF() {
                 const imgWidth = contentWidth;
                 const imgHeight = (canvas.height * imgWidth) / canvas.width;
                 
-                pdf.addImage(imgData, 'PNG', margin, 40, imgWidth, imgHeight);
+                pdf.addImage(imgData, 'PNG', margin, 40, imgWidth, Math.min(imgHeight, 100));
                 
             } catch (error) {
                 console.error('Error capturing line chart:', error);
@@ -341,11 +341,23 @@ async function generatePDF() {
         pdf.setTextColor(31, 41, 55);
         pdf.setFontSize(12);
         pdf.setFont('helvetica', 'bold');
-        pdf.text('Building Inputs Summary', margin, 170);
+        pdf.text('Building Inputs Summary', margin, 160);
 
+        // ✅ LER MATERIAIS DO CUSTOM DROPDOWN
+        const materialDropdown = document.getElementById('material-dropdown');
+        let selectedMaterials = 'N/A';
+        if (materialDropdown) {
+            const checkedBoxes = materialDropdown.querySelectorAll('input[type="checkbox"]:checked');
+            if (checkedBoxes.length > 0) {
+                selectedMaterials = Array.from(checkedBoxes)
+                    .map(cb => cb.value.charAt(0).toUpperCase() + cb.value.slice(1))
+                    .join(', ');
+            }
+        }
+
+        const buildingType = document.getElementById('building-type')?.value || 'N/A';
         const buildingArea = document.getElementById('building-area')?.value || 'N/A';
         const lifespan = document.getElementById('lifespan')?.value || 'N/A';
-        const structuralMaterial = document.getElementById('structural-material')?.value || 'N/A';
         const climateZone = document.getElementById('climate-zone')?.value || 'N/A';
         const embodiedEnergy = document.getElementById('embodied-energy')?.value || 'N/A';
         const operationalEnergy = document.getElementById('operational-energy')?.value || 'N/A';
@@ -354,14 +366,15 @@ async function generatePDF() {
         pdf.setFontSize(10);
         pdf.setFont('helvetica', 'normal');
         
-        let yPos = 180;
+        let yPos = 170;
         const inputs = [
+            ['Building Type:', buildingType === 'N/A' ? buildingType : buildingType.charAt(0).toUpperCase() + buildingType.slice(1).replace('-', ' ')],
             ['Building Area:', buildingArea + ' m²'],
             ['Expected Lifespan:', lifespan + ' years'],
-            ['Structural Material:', structuralMaterial.charAt(0).toUpperCase() + structuralMaterial.slice(1)],
-            ['Climate Zone:', climateZone.charAt(0).toUpperCase() + climateZone.slice(1)],
-            ['Embodied Energy Factor:', embodiedEnergy + ' kgCO₂/m²'],
-            ['Operational Energy:', operationalEnergy + ' kWh/m²/yr'],
+            ['Structural Materials:', selectedMaterials],
+            ['Climate Zone:', climateZone === 'N/A' ? climateZone : climateZone.charAt(0).toUpperCase() + climateZone.slice(1)],
+            ['Embodied Energy:', embodiedEnergy === 'unknown' ? 'Estimated' : embodiedEnergy + ' kgCO₂/m²'],
+            ['Operational Energy:', operationalEnergy === 'unknown' ? 'Estimated' : operationalEnergy + ' kWh/m²/yr'],
             ['Material Reuse Rate:', reuseRate + '%']
         ];
 
@@ -369,29 +382,34 @@ async function generatePDF() {
             pdf.setFont('helvetica', 'bold');
             pdf.text(label, margin, yPos);
             pdf.setFont('helvetica', 'normal');
-            pdf.text(value, margin + 60, yPos);
-            yPos += 7;
+            
+            // Wrap text se for muito longo
+            const maxWidth = contentWidth - 65;
+            const splitValue = pdf.splitTextToSize(value, maxWidth);
+            pdf.text(splitValue, margin + 65, yPos);
+            
+            yPos += (splitValue.length * 5) + 2;
         });
 
         // Methodology Note
         pdf.setFillColor(254, 243, 199); // Yellow background
-        pdf.roundedRect(margin, yPos + 10, contentWidth, 35, 2, 2, 'F');
+        pdf.roundedRect(margin, yPos + 5, contentWidth, 35, 2, 2, 'F');
         
         pdf.setTextColor(180, 83, 9);
         pdf.setFontSize(9);
         pdf.setFont('helvetica', 'bold');
-        pdf.text('Methodology:', margin + 3, yPos + 18);
+        pdf.text('Methodology:', margin + 3, yPos + 13);
         
         pdf.setFont('helvetica', 'normal');
         pdf.setTextColor(120, 53, 15);
         const methodologyText = 'This analysis evaluates 6 scenarios (Light, Medium, Deep Renovation vs Code-Compliant, High-Performance, Low-Carbon New Build) using whole-life carbon methodology. Results based on research by Valentine Lhoest.';
         const splitText = pdf.splitTextToSize(methodologyText, contentWidth - 10);
-        pdf.text(splitText, margin + 3, yPos + 25);
+        pdf.text(splitText, margin + 3, yPos + 20);
 
         // Footer
         pdf.setFontSize(8);
         pdf.setTextColor(107, 114, 128);
-        pdf.text('Page 4 of 4 | SustainaBuild Carbon Analysis Report | www.sustainabuild.com', 
+        pdf.text('Page 4 of 4 | SustainaBuild Carbon Analysis Report | sustainabuild.com', 
                  pageWidth / 2, pageHeight - 10, { align: 'center' });
 
         // ====================================
@@ -448,4 +466,4 @@ function showSuccessMessage(message) {
     }, 3000);
 }
 
-console.log('✨ PDF Export module loaded (4 pages with 6 scenarios table)');
+console.log('✨ PDF Export module loaded (4 pages with 6 scenarios + custom material dropdown support)');

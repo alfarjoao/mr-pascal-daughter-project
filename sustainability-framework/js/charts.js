@@ -51,12 +51,12 @@ const ChartsModule = (function() {
         const embodiedData = sortedScenarios.map(key => scenarios[key].embodiedCarbon);
         const operationalData = sortedScenarios.map(key => scenarios[key].operationalCarbon);
         
-        // Cores: Verde para renovation, Vermelho para new build
+        // Cores: Verde para renovation, Azul para new build
         const colors = sortedScenarios.map(key => 
-            scenarios[key].category === 'renovation' ? 'rgba(16, 185, 129, 0.8)' : 'rgba(239, 68, 68, 0.8)'
+            scenarios[key].category === 'renovation' ? 'rgba(16, 185, 129, 0.8)' : 'rgba(14, 165, 233, 0.8)'
         );
         const borderColors = sortedScenarios.map(key => 
-            scenarios[key].category === 'renovation' ? '#10b981' : '#ef4444'
+            scenarios[key].category === 'renovation' ? '#10b981' : '#0ea5e9'
         );
 
         barChart = new Chart(ctx, {
@@ -131,7 +131,7 @@ const ChartsModule = (function() {
                         stacked: true,
                         grid: { display: false },
                         ticks: {
-                            font: { size: 12, weight: '600' },
+                            font: { size: 11, weight: '600' },
                             color: '#374151',
                             maxRotation: 45,
                             minRotation: 0
@@ -192,8 +192,8 @@ const ChartsModule = (function() {
                     backgroundColor: [
                         '#10b981',  // Green - Renovation Embodied
                         '#34d399',  // Light Green - Renovation Operational
-                        '#ef4444',  // Red - New Build Embodied
-                        '#f87171'   // Light Red - New Build Operational
+                        '#0ea5e9',  // Blue - New Build Embodied
+                        '#38bdf8'   // Light Blue - New Build Operational
                     ],
                     borderColor: '#ffffff',
                     borderWidth: 3,
@@ -215,7 +215,7 @@ const ChartsModule = (function() {
                         display: true,
                         position: 'right',
                         labels: {
-                            font: { size: 12, weight: '600' },
+                            font: { size: 11, weight: '600' },
                             padding: 12,
                             usePointStyle: true,
                             pointStyle: 'circle'
@@ -253,10 +253,10 @@ const ChartsModule = (function() {
         const lifespan = resultsData.inputs.lifespan;
         
         // Generate years array (0 to lifespan)
-        const years = Array.from({ length: lifespan + 1 }, (_, i) => i);
+        const years = Array.from({ length: Math.min(lifespan + 1, 101) }, (_, i) => i);
         
         // Calculate cumulative carbon for each scenario
-        const datasets = Object.keys(scenarios).map(key => {
+        const datasets = Object.keys(scenarios).map((key, index) => {
             const scenario = scenarios[key];
             const embodied = scenario.embodiedCarbon;
             const operationalPerYear = scenario.operationalCarbon / lifespan;
@@ -266,9 +266,12 @@ const ChartsModule = (function() {
             );
             
             const isRenovation = scenario.category === 'renovation';
-            const color = isRenovation ? 
-                ['#10b981', '#34d399', '#6ee7b7'][Object.keys(scenarios).indexOf(key) % 3] :
-                ['#ef4444', '#f87171', '#fca5a5'][Object.keys(scenarios).indexOf(key) % 3];
+            const renovationColors = ['#10b981', '#34d399', '#6ee7b7'];
+            const newbuildColors = ['#0ea5e9', '#38bdf8', '#7dd3fc'];
+            
+            const colorArray = isRenovation ? renovationColors : newbuildColors;
+            const colorIndex = isRenovation ? index : (index - 3);
+            const color = colorArray[colorIndex % colorArray.length];
             
             return {
                 label: scenario.name,
@@ -311,10 +314,11 @@ const ChartsModule = (function() {
                         display: true,
                         position: 'top',
                         labels: {
-                            font: { size: 11, weight: '600' },
-                            padding: 10,
+                            font: { size: 10, weight: '600' },
+                            padding: 8,
                             usePointStyle: true,
-                            pointStyle: 'line'
+                            pointStyle: 'line',
+                            boxWidth: 30
                         }
                     },
                     tooltip: {
@@ -335,12 +339,14 @@ const ChartsModule = (function() {
                     x: {
                         grid: { display: false },
                         ticks: {
-                            font: { size: 11 },
+                            font: { size: 10 },
                             color: '#6b7280',
                             maxTicksLimit: 15,
                             callback: function(value, index) {
-                                // Show every 5 years
-                                return index % 5 === 0 ? 'Year ' + index : '';
+                                const year = years[index];
+                                // Show every 5 or 10 years depending on lifespan
+                                const interval = lifespan > 50 ? 10 : 5;
+                                return year % interval === 0 ? 'Year ' + year : '';
                             }
                         }
                     },
@@ -354,7 +360,10 @@ const ChartsModule = (function() {
                             font: { size: 11 },
                             color: '#6b7280',
                             callback: function(value) {
-                                return (value / 1000).toFixed(0) + 'k tCO₂e';
+                                if (value >= 1000) {
+                                    return (value / 1000).toFixed(0) + 'k';
+                                }
+                                return value.toLocaleString();
                             }
                         },
                         title: {
@@ -390,13 +399,13 @@ const ChartsModule = (function() {
         // Row 1: Total Carbon
         const totalRow = document.createElement('tr');
         totalRow.innerHTML = `
-            <td class="metric-name">Total Carbon</td>
+            <td class="metric-name"><strong>Total Carbon</strong></td>
             ${scenarioKeys.map(key => {
                 const value = scenarios[key].totalCarbon;
                 const isBest = value === bestTotal;
                 return `<td class="${isBest ? 'best-value' : ''}">
                     ${value.toLocaleString()} tCO₂e
-                    ${isBest ? ' ✓' : ''}
+                    ${isBest ? ' <span style="color: #10b981;">✓</span>' : ''}
                 </td>`;
             }).join('')}
         `;
@@ -411,7 +420,7 @@ const ChartsModule = (function() {
                 const isBest = value === bestEmbodied;
                 return `<td class="${isBest ? 'best-value' : ''}">
                     ${value.toLocaleString()} tCO₂e
-                    ${isBest ? ' ✓' : ''}
+                    ${isBest ? ' <span style="color: #10b981;">✓</span>' : ''}
                 </td>`;
             }).join('')}
         `;
@@ -426,7 +435,7 @@ const ChartsModule = (function() {
                 const isBest = value === bestOperational;
                 return `<td class="${isBest ? 'best-value' : ''}">
                     ${value.toLocaleString()} tCO₂e
-                    ${isBest ? ' ✓' : ''}
+                    ${isBest ? ' <span style="color: #10b981;">✓</span>' : ''}
                 </td>`;
             }).join('')}
         `;
@@ -437,7 +446,7 @@ const ChartsModule = (function() {
         categoryRow.innerHTML = `
             <td class="metric-name">Category</td>
             ${scenarioKeys.map(key => 
-                `<td>${scenarios[key].category === 'renovation' ? '🔨 Renovation' : '🏗️ New Build'}</td>`
+                `<td style="font-weight: 500;">${scenarios[key].category === 'renovation' ? '🔨 Renovation' : '🏗️ New Build'}</td>`
             ).join('')}
         `;
         tbody.appendChild(categoryRow);
@@ -455,4 +464,4 @@ const ChartsModule = (function() {
 // Expose to global scope
 window.ChartsModule = ChartsModule;
 
-console.log('✨ Charts module loaded (6 scenarios support)');
+console.log('✨ Charts module loaded (6 scenarios support with custom material dropdown)');
