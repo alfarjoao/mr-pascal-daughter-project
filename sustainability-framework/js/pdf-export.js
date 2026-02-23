@@ -1,6 +1,6 @@
 /* ========================================
    BUILDING SUSTAINABILITY FRAMEWORK
-   PDF Export Module - 4 Pages with 6 Scenarios
+   PDF Export Module - 4 Pages with 7 Scenarios
    ======================================== */
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -48,7 +48,7 @@ async function generatePDF() {
         
         pdf.setFontSize(12);
         pdf.setFont('helvetica', 'normal');
-        pdf.text('Carbon Analysis Report', margin, 28);
+        pdf.text('Carbon Analysis Report (7 Scenarios)', margin, 28);
         
         // Generation date
         const today = new Date().toLocaleDateString('en-GB', { 
@@ -158,7 +158,7 @@ async function generatePDF() {
                  pageWidth / 2, pageHeight - 10, { align: 'center' });
 
         // ====================================
-        // PAGE 2: COMPARISON TABLE (6 SCENARIOS)
+        // PAGE 2: COMPARISON TABLE (7 SCENARIOS) ✅ CORRIGIDO
         // ====================================
         
         pdf.addPage();
@@ -169,7 +169,7 @@ async function generatePDF() {
         pdf.setTextColor(255, 255, 255);
         pdf.setFontSize(16);
         pdf.setFont('helvetica', 'bold');
-        pdf.text('6 Scenarios Comparison Table', margin, 18);
+        pdf.text('7 Scenarios Comparison Table', margin, 18); // ✅ MUDADO DE 6 PARA 7
 
         // Capture table
         const tableElement = document.getElementById('comparisonTable');
@@ -216,14 +216,14 @@ async function generatePDF() {
             pdf.text('Error: Comparison table not found', margin, 50);
         }
 
-        // Footer
+        // Footer ✅ CORRIGIDO
         pdf.setFontSize(8);
         pdf.setTextColor(107, 114, 128);
-        pdf.text('Page 2 of 4 | SustainaBuild Carbon Analysis Report', 
+        pdf.text('Page 2 of 4 | SustainaBuild Carbon Analysis Report (7 Scenarios)', 
                  pageWidth / 2, pageHeight - 10, { align: 'center' });
 
         // ====================================
-        // PAGE 3: BAR CHART + PIE CHART
+        // PAGE 3: BAR CHART + PIE CHART ✅ CORRIGIDO
         // ====================================
         
         pdf.addPage();
@@ -234,7 +234,7 @@ async function generatePDF() {
         pdf.setTextColor(255, 255, 255);
         pdf.setFontSize(16);
         pdf.setFont('helvetica', 'bold');
-        pdf.text('Visual Analysis', margin, 18);
+        pdf.text('Visual Analysis (7 Scenarios)', margin, 18); // ✅ MUDADO DE 6 PARA 7
 
         // Bar Chart
         const barChartElement = document.getElementById('barChart');
@@ -393,7 +393,7 @@ async function generatePDF() {
 
         // Methodology Note
         pdf.setFillColor(254, 243, 199); // Yellow background
-        pdf.roundedRect(margin, yPos + 5, contentWidth, 35, 2, 2, 'F');
+        pdf.roundedRect(margin, yPos + 5, contentWidth, 40, 2, 2, 'F');
         
         pdf.setTextColor(180, 83, 9);
         pdf.setFontSize(9);
@@ -402,7 +402,7 @@ async function generatePDF() {
         
         pdf.setFont('helvetica', 'normal');
         pdf.setTextColor(120, 53, 15);
-        const methodologyText = 'This analysis evaluates 6 scenarios (Light, Medium, Deep Renovation vs Code-Compliant, High-Performance, Low-Carbon New Build) using whole-life carbon methodology. Results based on research by Valentine Lhoest.';
+        const methodologyText = 'This analysis evaluates 7 scenarios (Light, Medium, Deep Renovation, Deep + Slight Demolition vs Code-Compliant, High-Performance, Low-Carbon New Build) using whole-life carbon methodology. Results based on research by Valentine Lhoest.';
         const splitText = pdf.splitTextToSize(methodologyText, contentWidth - 10);
         pdf.text(splitText, margin + 3, yPos + 20);
 
@@ -416,7 +416,7 @@ async function generatePDF() {
         // SAVE PDF
         // ====================================
         
-        const filename = 'SustainaBuild_Report_' + 
+        const filename = 'SustainaBuild_Report_7Scenarios_' + 
                         today.replace(/\//g, '-') + '.pdf';
         
         pdf.save(filename);
@@ -466,4 +466,4 @@ function showSuccessMessage(message) {
     }, 3000);
 }
 
-console.log('✨ PDF Export module loaded (4 pages with 6 scenarios + custom material dropdown support)');
+console.log('✨ PDF Export module loaded (4 pages with 7 scenarios + custom material dropdown support)');

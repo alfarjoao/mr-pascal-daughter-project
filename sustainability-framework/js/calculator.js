@@ -12,6 +12,7 @@ let formData = {};
 const scenarioDefaults = {
     'light-renovation': {
         name: 'Light Renovation',
+        displayName: 'Light Renovation',
         reuseRate: 0.90,
         embodiedFactor: 0.15,
         operationalImprovement: 0.25,
@@ -19,6 +20,7 @@ const scenarioDefaults = {
     },
     'medium-renovation': {
         name: 'Medium Renovation',
+        displayName: 'Medium Renovation',
         reuseRate: 0.70,
         embodiedFactor: 0.35,
         operationalImprovement: 0.40,
@@ -26,6 +28,7 @@ const scenarioDefaults = {
     },
     'deep-renovation': {
         name: 'Deep Renovation',
+        displayName: 'Deep Renovation',
         reuseRate: 0.50,
         embodiedFactor: 0.60,
         operationalImprovement: 0.55,
@@ -33,6 +36,7 @@ const scenarioDefaults = {
     },
     'deep-renovation-demolition': {
         name: 'Deep Renovation + Slight Demolition',
+        displayName: 'Deep + Demo',
         reuseRate: 0.40,
         embodiedFactor: 0.75,
         operationalImprovement: 0.60,
@@ -40,6 +44,7 @@ const scenarioDefaults = {
     },
     'code-compliant-new': {
         name: 'Code-Compliant New Build',
+        displayName: 'Code-Compliant',
         reuseRate: 0.10,
         embodiedFactor: 1.50,
         operationalImprovement: 0.60,
@@ -47,6 +52,7 @@ const scenarioDefaults = {
     },
     'high-performance-new': {
         name: 'High-Performance New Build',
+        displayName: 'High-Performance',
         reuseRate: 0.05,
         embodiedFactor: 1.30,
         operationalImprovement: 0.75,
@@ -54,6 +60,7 @@ const scenarioDefaults = {
     },
     'low-carbon-new': {
         name: 'Low-Carbon New Build',
+        displayName: 'Low-Carbon',
         reuseRate: 0.15,
         embodiedFactor: 0.90,
         operationalImprovement: 0.80,
@@ -106,7 +113,8 @@ document.addEventListener('DOMContentLoaded', function() {
     updateUI();
     initTabs();
     setupUnknownLogic();
-    setupMaterialDropdown(); // ✅ NOVO
+    setupMaterialDropdown();
+    injectAnimationStyles();
 });
 
 /* ========================================
@@ -121,7 +129,6 @@ function setupMaterialDropdown() {
     const checkboxes = dropdown.querySelectorAll('input[type="checkbox"]');
     const placeholder = dropdown.querySelector('.multiselect-placeholder');
     
-    // Toggle dropdown ao clicar no trigger
     trigger.addEventListener('click', function(e) {
         e.stopPropagation();
         const isOpen = dropdownContainer.style.display === 'block';
@@ -133,7 +140,6 @@ function setupMaterialDropdown() {
         }
     });
     
-    // Atualizar placeholder quando checkboxes mudam
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener('change', function() {
             updatePlaceholder();
@@ -141,14 +147,12 @@ function setupMaterialDropdown() {
         });
     });
     
-    // Fechar dropdown ao clicar fora
     document.addEventListener('click', function(e) {
         if (!dropdown.contains(e.target)) {
             closeDropdown();
         }
     });
     
-    // Prevenir dropdown close ao clicar dentro
     dropdownContainer.addEventListener('click', function(e) {
         e.stopPropagation();
     });
@@ -282,7 +286,6 @@ function validateInput(input) {
         errorMessage.style.display = 'none';
     }
     
-    // Check if required and empty
     if (input.hasAttribute('required') && !input.value.trim()) {
         input.classList.add('input-invalid');
         if (errorMessage) {
@@ -330,7 +333,6 @@ function validateCurrentStep() {
     let isValid = true;
     let firstInvalidInput = null;
 
-    // ✅ Validar material dropdown separadamente
     if (currentStep === 1) {
         const materialDropdown = document.getElementById('material-dropdown');
         if (materialDropdown) {
@@ -513,7 +515,6 @@ function performCalculation() {
     const lifespan = parseFloat(document.getElementById('lifespan').value);
     const climate = document.getElementById('climate-zone').value;
     
-    // ✅ MATERIAL MULTI-SELECT (CUSTOM DROPDOWN)
     const materialDropdown = document.getElementById('material-dropdown');
     const materialCheckboxes = materialDropdown.querySelectorAll('input[type="checkbox"]:checked');
     const selectedMaterials = Array.from(materialCheckboxes).map(cb => cb.value);
@@ -522,7 +523,6 @@ function performCalculation() {
         ? selectedMaterials.reduce((sum, mat) => sum + (materialFactors[mat] || 1.0), 0) / selectedMaterials.length
         : 1.0;
     
-    // ✅ EMBODIED ENERGY (COM "UNKNOWN" SUPPORT)
     let embodiedEnergy;
     const embodiedEnergyValue = document.getElementById('embodied-energy').value;
     if (embodiedEnergyValue === 'unknown') {
@@ -532,7 +532,6 @@ function performCalculation() {
         embodiedEnergy = parseFloat(embodiedEnergyValue);
     }
     
-    // ✅ OPERATIONAL ENERGY (COM "UNKNOWN" SUPPORT)
     let operationalEnergy;
     const operationalEnergyValue = document.getElementById('operational-energy').value;
     if (operationalEnergyValue === 'unknown') {
@@ -545,7 +544,8 @@ function performCalculation() {
     const userReuseRate = parseFloat(document.getElementById('reuse-rate').value) / 100;
     const climateFactor = climateMultipliers[climate] || 1.0;
 
-    const scenarios = {};
+    // ✅ CRIAR ARRAY DE CENÁRIOS (NÃO OBJETO)
+    const scenariosArray = [];
     
     Object.keys(scenarioDefaults).forEach(scenarioKey => {
         const scenario = scenarioDefaults[scenarioKey];
@@ -558,46 +558,44 @@ function performCalculation() {
         const operationalCarbon = operationalEnergy * (1 - operationalImprovement) * area * climateFactor * lifespan * 0.5;
         const totalCarbon = embodiedCarbon + operationalCarbon;
 
-        scenarios[scenarioKey] = {
-            name: scenario.name,
+        scenariosArray.push({
+            name: scenarioKey,
+            displayName: scenario.displayName,
             category: scenario.category,
             embodiedCarbon: Math.round(embodiedCarbon),
             operationalCarbon: Math.round(operationalCarbon),
             totalCarbon: Math.round(totalCarbon)
-        };
+        });
     });
 
-    console.log('📊 Calculated 7 scenarios:', scenarios);
-    console.log('🏢 Building Type:', buildingType);
-    console.log('🧱 Selected Materials:', selectedMaterials, '→ Factor:', materialFactor.toFixed(2));
+    console.log('📊 Calculated 7 scenarios (ARRAY):', scenariosArray);
 
-    const renovationScenarios = Object.keys(scenarios).filter(k => scenarios[k].category === 'renovation');
-    const newbuildScenarios = Object.keys(scenarios).filter(k => scenarios[k].category === 'newbuild');
+    // Encontrar melhor renovação e melhor new build
+    const renovationScenarios = scenariosArray.filter(s => s.category === 'renovation');
+    const newbuildScenarios = scenariosArray.filter(s => s.category === 'newbuild');
 
-    const bestRenovationKey = renovationScenarios.reduce((best, current) => 
-        scenarios[current].totalCarbon < scenarios[best].totalCarbon ? current : best
+    const bestRenovation = renovationScenarios.reduce((best, current) => 
+        current.totalCarbon < best.totalCarbon ? current : best
     );
 
-    const bestNewbuildKey = newbuildScenarios.reduce((best, current) => 
-        scenarios[current].totalCarbon < scenarios[best].totalCarbon ? current : best
+    const bestNewbuild = newbuildScenarios.reduce((best, current) => 
+        current.totalCarbon < best.totalCarbon ? current : best
     );
-
-    const bestRenovation = scenarios[bestRenovationKey];
-    const bestNewbuild = scenarios[bestNewbuildKey];
 
     const decision = bestRenovation.totalCarbon < bestNewbuild.totalCarbon ? 'RENOVATE' : 'DEMOLISH & REBUILD';
-    const recommended = decision === 'RENOVATE' ? bestRenovation.name : bestNewbuild.name;
+    const recommended = decision === 'RENOVATE' ? bestRenovation.displayName : bestNewbuild.displayName;
     const savings = Math.abs(bestRenovation.totalCarbon - bestNewbuild.totalCarbon);
     const savingsPercentage = ((savings / Math.max(bestRenovation.totalCarbon, bestNewbuild.totalCarbon)) * 100).toFixed(1);
 
+    // ✅ RESULTADO COM ARRAY
     const results = {
         decision: decision,
-        recommended: recommended,
+        recommendedScenario: recommended,
         savings: savings,
         savingsPercent: savingsPercentage,
         bestRenovation: bestRenovation,
         bestNewbuild: bestNewbuild,
-        allScenarios: scenarios,
+        allScenarios: scenariosArray,  // ✅ AGORA É ARRAY
         inputs: {
             buildingType: buildingType,
             buildingArea: area,
@@ -611,7 +609,7 @@ function performCalculation() {
         }
     };
 
-    console.log('✅ Final results:', results);
+    console.log('✅ Final results (allScenarios is ARRAY):', results);
 
     displayResults(results);
 }
@@ -634,7 +632,7 @@ function displayResults(results) {
             decisionText.textContent = 'RENOVATE';
         }
         if (resultsTitle) {
-            resultsTitle.textContent = results.recommended + ' is the better choice';
+            resultsTitle.textContent = results.recommendedScenario + ' is the better choice';
         }
     } else {
         if (decisionBadge) {
@@ -644,7 +642,7 @@ function displayResults(results) {
             decisionText.textContent = 'DEMOLISH & REBUILD';
         }
         if (resultsTitle) {
-            resultsTitle.textContent = results.recommended + ' is recommended';
+            resultsTitle.textContent = results.recommendedScenario + ' is recommended';
         }
     }
 
@@ -732,7 +730,10 @@ function initTabs() {
     const tabPanes = document.querySelectorAll('.tab-pane');
     
     tabBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
             const targetTab = btn.dataset.tab;
             
             tabBtns.forEach(b => b.classList.remove('active'));
@@ -748,285 +749,25 @@ function initTabs() {
 }
 
 /* ========================================
-   ANIMATIONS CSS (inject into page)
+   INJECT ANIMATION STYLES
    ======================================== */
-const animationStyles = document.createElement('style');
-animationStyles.textContent = `
-    @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
-        20%, 40%, 60%, 80% { transform: translateX(8px); }
-    }
+function injectAnimationStyles() {
+    if (document.getElementById('calculator-animations')) return;
     
-    @keyframes slideInRight {
-        from {
-            opacity: 0;
-            transform: translateX(100px);
+    const styleElement = document.createElement('style');
+    styleElement.id = 'calculator-animations';
+    styleElement.textContent = `
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
+            20%, 40%, 60%, 80% { transform: translateX(8px); }
         }
-        to {
-            opacity: 1;
-            transform: translateX(0);
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
-    }
-    
-    @keyframes slideOutRight {
-        from {
-            opacity: 1;
-            transform: translateX(0);
-        }
-        to {
-            opacity: 0;
-            transform: translateX(100px);
-        }
-    }
-    
-    @keyframes spin {
-        to { transform: rotate(360deg); }
-    }
-    
-    .form-section {
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    
-    .btn {
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    
-    .form-input.input-valid,
-    .form-select.input-valid {
-        border-color: #10b981 !important;
-        background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M9 12L11 14L15 10' stroke='%2310b981' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='12' cy='12' r='10' stroke='%2310b981' stroke-width='2'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 12px center;
-        background-size: 22px;
-        padding-right: 45px;
-    }
-    
-    .form-input.input-invalid,
-    .form-select.input-invalid {
-        border-color: #ef4444 !important;
-        background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='10' stroke='%23ef4444' stroke-width='2'/%3E%3Cpath d='M12 8V12M12 16H12.01' stroke='%23ef4444' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 12px center;
-        background-size: 22px;
-        padding-right: 45px;
-    }
-    
-    /* ✅ CUSTOM MULTISELECT DROPDOWN STYLES */
-    .custom-multiselect {
-        position: relative;
-        width: 100%;
-    }
-    
-    .multiselect-trigger {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0.875rem 1rem;
-        background: white;
-        border: 2px solid #e5e7eb;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        min-height: 52px;
-    }
-    
-    .multiselect-trigger:hover {
-        border-color: #047857;
-    }
-    
-    .multiselect-trigger:focus {
-        outline: none;
-        border-color: #047857;
-        box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.1);
-    }
-    
-    .custom-multiselect.open .multiselect-trigger {
-        border-color: #047857;
-        box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.1);
-    }
-    
-    .multiselect-placeholder {
-        flex: 1;
-        color: #9ca3af;
-        font-size: 1rem;
-    }
-    
-    .multiselect-arrow {
-        transition: transform 0.2s ease;
-        stroke: #6b7280;
-        flex-shrink: 0;
-    }
-    
-    .custom-multiselect.open .multiselect-arrow {
-        transform: rotate(180deg);
-    }
-    
-    .multiselect-dropdown {
-        position: absolute;
-        top: calc(100% + 0.5rem);
-        left: 0;
-        right: 0;
-        background: white;
-        border: 2px solid #e5e7eb;
-        border-radius: 8px;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-        z-index: 100;
-        max-height: 320px;
-        overflow-y: auto;
-        padding: 0.5rem;
-    }
-    
-    .checkbox-item {
-        display: flex;
-        align-items: center;
-        padding: 0.875rem 1rem;
-        cursor: pointer;
-        border-radius: 6px;
-        transition: background 0.15s ease;
-        margin-bottom: 0.25rem;
-        user-select: none;
-    }
-    
-    .checkbox-item:hover {
-        background: #f9fafb;
-    }
-    
-    .checkbox-item:last-child {
-        margin-bottom: 0;
-    }
-    
-    .checkbox-item input[type="checkbox"] {
-        position: absolute;
-        opacity: 0;
-        pointer-events: none;
-    }
-    
-    .checkbox-custom {
-        width: 22px;
-        height: 22px;
-        border: 2.5px solid #d1d5db;
-        border-radius: 5px;
-        margin-right: 0.875rem;
-        flex-shrink: 0;
-        transition: all 0.2s ease;
-        position: relative;
-        background: white;
-    }
-    
-    .checkbox-item:hover .checkbox-custom {
-        border-color: #047857;
-    }
-    
-    .checkbox-item input[type="checkbox"]:checked + .checkbox-custom {
-        background: #047857;
-        border-color: #047857;
-    }
-    
-    .checkbox-item input[type="checkbox"]:checked + .checkbox-custom::after {
-        content: '';
-        position: absolute;
-        left: 6px;
-        top: 2px;
-        width: 6px;
-        height: 11px;
-        border: solid white;
-        border-width: 0 2.5px 2.5px 0;
-        transform: rotate(45deg);
-    }
-    
-    .checkbox-label {
-        flex: 1;
-        font-size: 1rem;
-        color: #111827;
-        font-weight: 500;
-    }
-    
-    .checkbox-item input[type="checkbox"]:checked ~ .checkbox-label {
-        color: #047857;
-        font-weight: 600;
-    }
-    
-    /* VALIDATION STATES */
-    .custom-multiselect.input-valid .multiselect-trigger {
-        border-color: #10b981 !important;
-    }
-    
-    .custom-multiselect.input-invalid .multiselect-trigger {
-        border-color: #ef4444 !important;
-    }
-    
-    .multiselect-dropdown::-webkit-scrollbar {
-        width: 8px;
-    }
-    
-    .multiselect-dropdown::-webkit-scrollbar-track {
-        background: #f3f4f6;
-        border-radius: 4px;
-    }
-    
-    .multiselect-dropdown::-webkit-scrollbar-thumb {
-        background: #d1d5db;
-        border-radius: 4px;
-    }
-    
-    .multiselect-dropdown::-webkit-scrollbar-thumb:hover {
-        background: #9ca3af;
-    }
-    
-    .input-error-message {
-        display: none;
-        color: #ef4444;
-        font-size: 0.875rem;
-        margin-top: 0.5rem;
-        font-weight: 500;
-        padding-left: 0.25rem;
-        animation: fadeIn 0.3s ease-in;
-    }
-    
-    .input-error-message::before {
-        content: '⚠ ';
-        margin-right: 0.25rem;
-    }
-    
-    .validation-notification {
-        position: fixed;
-        top: 100px;
-        right: 20px;
-        background: #ef4444;
-        color: white;
-        padding: 1rem 1.5rem;
-        border-radius: 12px;
-        font-weight: 600;
-        font-size: 0.95rem;
-        z-index: 9999;
-        animation: slideInRight 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 10px 40px rgba(239, 68, 68, 0.35);
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        max-width: 400px;
-        border-left: 4px solid #dc2626;
-    }
-    
-    .validation-notification svg {
-        flex-shrink: 0;
-        width: 22px;
-        height: 22px;
-    }
-    
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(-5px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-`;
-document.head.appendChild(animationStyles);
+    `;
+    document.head.appendChild(styleElement);
+}
 
 /* ========================================
    DEBUG HELPERS

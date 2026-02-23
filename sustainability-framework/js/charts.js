@@ -1,6 +1,7 @@
 /* ========================================
    BUILDING SUSTAINABILITY FRAMEWORK
-   Charts Module - 6 Scenarios Visualization
+   Charts Module - 7 Scenarios Visualization
+   VERSÃO COM DEBUG COMPLETO
    ======================================== */
 
 const ChartsModule = (function() {
@@ -8,256 +9,367 @@ const ChartsModule = (function() {
     let resultsData = null;
 
     // Chart.js default config
-    Chart.defaults.font.family = "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
-    Chart.defaults.color = '#64748b';
+    if (typeof Chart !== 'undefined') {
+        Chart.defaults.font.family = "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+        Chart.defaults.color = '#64748b';
+        console.log('✅ Chart.js detected and configured');
+    } else {
+        console.error('❌ Chart.js NOT LOADED! Check CDN link in HTML');
+    }
 
     function init(data) {
-        console.log('📊 Initializing charts with data:', data);
+        console.log('📊 ========================================');
+        console.log('📊 ChartsModule.init() called');
+        console.log('📊 Received data:', data);
+        
+        if (!data) {
+            console.error('❌ No data provided to ChartsModule.init()');
+            return;
+        }
+        
+        if (!data.allScenarios) {
+            console.error('❌ data.allScenarios is missing!', data);
+            return;
+        }
+        
+        if (!Array.isArray(data.allScenarios)) {
+            console.error('❌ data.allScenarios is not an array!', typeof data.allScenarios, data.allScenarios);
+            return;
+        }
+        
+        if (data.allScenarios.length === 0) {
+            console.error('❌ data.allScenarios is empty!');
+            return;
+        }
+        
+        console.log('✅ Data validation passed');
+        console.log('✅ Number of scenarios:', data.allScenarios.length);
+        
         resultsData = data;
         
         // Destroy existing charts
         destroyCharts();
         
-        // Create new charts
+        // Create new charts with delay
         setTimeout(() => {
+            console.log('📊 Starting chart creation...');
             createBarChart();
             createPieChart();
             createLineChart();
             createComparisonTable();
+            console.log('📊 ========================================');
         }, 300);
     }
 
     function destroyCharts() {
-        if (barChart) barChart.destroy();
-        if (pieChart) pieChart.destroy();
-        if (lineChart) lineChart.destroy();
+        console.log('🗑️ Destroying existing charts...');
+        if (barChart) {
+            barChart.destroy();
+            console.log('  ✓ Bar chart destroyed');
+        }
+        if (pieChart) {
+            pieChart.destroy();
+            console.log('  ✓ Pie chart destroyed');
+        }
+        if (lineChart) {
+            lineChart.destroy();
+            console.log('  ✓ Line chart destroyed');
+        }
     }
 
     /* ========================================
-       BAR CHART - 6 SCENARIOS COMPARISON
+       BAR CHART - 7 SCENARIOS COMPARISON
        ======================================== */
     function createBarChart() {
+        console.log('📊 Creating BAR CHART...');
+        
         const ctx = document.getElementById('barChart');
-        if (!ctx || !resultsData) return;
+        
+        if (!ctx) {
+            console.error('❌ Canvas element #barChart NOT FOUND in DOM!');
+            console.log('Available canvas elements:', document.querySelectorAll('canvas'));
+            return;
+        }
+        
+        console.log('✅ Canvas #barChart found:', ctx);
+        
+        if (!resultsData || !resultsData.allScenarios) {
+            console.error('❌ resultsData or allScenarios missing');
+            return;
+        }
 
         const scenarios = resultsData.allScenarios;
+        console.log('📊 Processing', scenarios.length, 'scenarios for bar chart');
         
-        // Ordenar cenários por total carbon (menor para maior)
-        const sortedScenarios = Object.keys(scenarios).sort((a, b) => 
-            scenarios[a].totalCarbon - scenarios[b].totalCarbon
+        // Sort scenarios by total carbon
+        const sortedScenarios = scenarios.slice().sort((a, b) => 
+            a.totalCarbon - b.totalCarbon
+        );
+        
+        console.log('📊 Sorted scenarios:', sortedScenarios.map(s => s.displayName));
+
+        const labels = sortedScenarios.map(s => s.displayName);
+        const embodiedData = sortedScenarios.map(s => s.embodiedCarbon);
+        const operationalData = sortedScenarios.map(s => s.operationalCarbon);
+        
+        console.log('📊 Labels:', labels);
+        console.log('📊 Embodied data:', embodiedData);
+        console.log('📊 Operational data:', operationalData);
+        
+        // Colors
+        const colors = sortedScenarios.map(s => 
+            s.category === 'renovation' ? 'rgba(16, 185, 129, 0.8)' : 'rgba(14, 165, 233, 0.8)'
+        );
+        const borderColors = sortedScenarios.map(s => 
+            s.category === 'renovation' ? '#10b981' : '#0ea5e9'
         );
 
-        const labels = sortedScenarios.map(key => scenarios[key].name);
-        const embodiedData = sortedScenarios.map(key => scenarios[key].embodiedCarbon);
-        const operationalData = sortedScenarios.map(key => scenarios[key].operationalCarbon);
-        
-        // Cores: Verde para renovation, Azul para new build
-        const colors = sortedScenarios.map(key => 
-            scenarios[key].category === 'renovation' ? 'rgba(16, 185, 129, 0.8)' : 'rgba(14, 165, 233, 0.8)'
-        );
-        const borderColors = sortedScenarios.map(key => 
-            scenarios[key].category === 'renovation' ? '#10b981' : '#0ea5e9'
-        );
-
-        barChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        label: 'Embodied Carbon',
-                        data: embodiedData,
-                        backgroundColor: colors,
-                        borderColor: borderColors,
-                        borderWidth: 2,
-                        borderRadius: 8,
-                    },
-                    {
-                        label: 'Operational Carbon',
-                        data: operationalData,
-                        backgroundColor: colors.map(c => c.replace('0.8', '0.5')),
-                        borderColor: borderColors,
-                        borderWidth: 2,
-                        borderRadius: 8,
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                interaction: {
-                    mode: 'index',
-                    intersect: false,
-                },
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Carbon Comparison Across 6 Scenarios',
-                        font: { size: 18, weight: 'bold' },
-                        color: '#1f2937',
-                        padding: { bottom: 20 }
-                    },
-                    legend: {
-                        display: true,
-                        position: 'top',
-                        labels: {
-                            font: { size: 13, weight: '600' },
-                            padding: 15,
-                            usePointStyle: true,
-                            pointStyle: 'rectRounded'
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(31, 41, 55, 0.95)',
-                        titleFont: { size: 14, weight: 'bold' },
-                        bodyFont: { size: 13 },
-                        padding: 12,
-                        cornerRadius: 8,
-                        displayColors: true,
-                        callbacks: {
-                            label: function(context) {
-                                return context.dataset.label + ': ' + 
-                                       context.parsed.y.toLocaleString() + ' tCO₂e';
-                            },
-                            footer: function(tooltipItems) {
-                                const total = tooltipItems.reduce((sum, item) => sum + item.parsed.y, 0);
-                                return 'Total: ' + total.toLocaleString() + ' tCO₂e';
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        stacked: true,
-                        grid: { display: false },
-                        ticks: {
-                            font: { size: 11, weight: '600' },
-                            color: '#374151',
-                            maxRotation: 45,
-                            minRotation: 0
-                        }
-                    },
-                    y: {
-                        stacked: true,
-                        beginAtZero: true,
-                        grid: {
-                            color: '#e5e7eb',
-                            lineWidth: 1
+        try {
+            barChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Embodied Carbon',
+                            data: embodiedData,
+                            backgroundColor: colors,
+                            borderColor: borderColors,
+                            borderWidth: 2,
+                            borderRadius: 8,
                         },
-                        ticks: {
-                            font: { size: 12 },
-                            color: '#6b7280',
-                            callback: function(value) {
-                                return value.toLocaleString() + ' tCO₂e';
-                            }
-                        },
+                        {
+                            label: 'Operational Carbon',
+                            data: operationalData,
+                            backgroundColor: colors.map(c => c.replace('0.8', '0.5')),
+                            borderColor: borderColors,
+                            borderWidth: 2,
+                            borderRadius: 8,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: {
                         title: {
                             display: true,
-                            text: 'Total Carbon Emissions (tCO₂e)',
-                            font: { size: 13, weight: '600' },
-                            color: '#374151'
+                            text: '7-Scenario Carbon Comparison',
+                            font: { size: 18, weight: 'bold' },
+                            color: '#1f2937',
+                            padding: { bottom: 20 }
+                        },
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                font: { size: 13, weight: '600' },
+                                padding: 15,
+                                usePointStyle: true,
+                                pointStyle: 'rectRounded'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(31, 41, 55, 0.95)',
+                            titleFont: { size: 14, weight: 'bold' },
+                            bodyFont: { size: 13 },
+                            padding: 12,
+                            cornerRadius: 8,
+                            displayColors: true,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + 
+                                           context.parsed.y.toLocaleString() + ' tCO₂e';
+                                },
+                                footer: function(tooltipItems) {
+                                    const total = tooltipItems.reduce((sum, item) => sum + item.parsed.y, 0);
+                                    return 'Total: ' + total.toLocaleString() + ' tCO₂e';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked: true,
+                            grid: { display: false },
+                            ticks: {
+                                font: { size: 10, weight: '600' },
+                                color: '#374151',
+                                maxRotation: 45,
+                                minRotation: 0
+                            }
+                        },
+                        y: {
+                            stacked: true,
+                            beginAtZero: true,
+                            grid: {
+                                color: '#e5e7eb',
+                                lineWidth: 1
+                            },
+                            ticks: {
+                                font: { size: 12 },
+                                color: '#6b7280',
+                                callback: function(value) {
+                                    return value.toLocaleString() + ' tCO₂e';
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Total Carbon Emissions (tCO₂e)',
+                                font: { size: 13, weight: '600' },
+                                color: '#374151'
+                            }
                         }
                     }
                 }
-            }
-        });
+            });
+            
+            console.log('✅ BAR CHART created successfully!', barChart);
+            
+        } catch (error) {
+            console.error('❌ Error creating bar chart:', error);
+        }
     }
 
     /* ========================================
        PIE CHART - BREAKDOWN (BEST SCENARIOS)
        ======================================== */
     function createPieChart() {
+        console.log('📊 Creating PIE CHART...');
+        
         const ctx = document.getElementById('pieChart');
-        if (!ctx || !resultsData) return;
+        
+        if (!ctx) {
+            console.error('❌ Canvas element #pieChart NOT FOUND in DOM!');
+            return;
+        }
+        
+        console.log('✅ Canvas #pieChart found:', ctx);
+        
+        if (!resultsData) {
+            console.error('❌ resultsData missing');
+            return;
+        }
 
         const bestRenovation = resultsData.bestRenovation;
         const bestNewbuild = resultsData.bestNewbuild;
+        
+        if (!bestRenovation || !bestNewbuild) {
+            console.error('❌ Missing best scenarios:', {bestRenovation, bestNewbuild});
+            return;
+        }
 
-        pieChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: [
-                    bestRenovation.name + ' (Embodied)',
-                    bestRenovation.name + ' (Operational)',
-                    bestNewbuild.name + ' (Embodied)',
-                    bestNewbuild.name + ' (Operational)'
-                ],
-                datasets: [{
-                    data: [
-                        bestRenovation.embodiedCarbon,
-                        bestRenovation.operationalCarbon,
-                        bestNewbuild.embodiedCarbon,
-                        bestNewbuild.operationalCarbon
+        console.log('✅ Best renovation:', bestRenovation.displayName);
+        console.log('✅ Best newbuild:', bestNewbuild.displayName);
+
+        try {
+            pieChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: [
+                        bestRenovation.displayName + ' (Embodied)',
+                        bestRenovation.displayName + ' (Operational)',
+                        bestNewbuild.displayName + ' (Embodied)',
+                        bestNewbuild.displayName + ' (Operational)'
                     ],
-                    backgroundColor: [
-                        '#10b981',  // Green - Renovation Embodied
-                        '#34d399',  // Light Green - Renovation Operational
-                        '#0ea5e9',  // Blue - New Build Embodied
-                        '#38bdf8'   // Light Blue - New Build Operational
-                    ],
-                    borderColor: '#ffffff',
-                    borderWidth: 3,
-                    hoverOffset: 15
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Carbon Breakdown: Best Renovation vs Best New Build',
-                        font: { size: 18, weight: 'bold' },
-                        color: '#1f2937',
-                        padding: { bottom: 20 }
-                    },
-                    legend: {
-                        display: true,
-                        position: 'right',
-                        labels: {
-                            font: { size: 11, weight: '600' },
+                    datasets: [{
+                        data: [
+                            bestRenovation.embodiedCarbon,
+                            bestRenovation.operationalCarbon,
+                            bestNewbuild.embodiedCarbon,
+                            bestNewbuild.operationalCarbon
+                        ],
+                        backgroundColor: [
+                            '#10b981',
+                            '#34d399',
+                            '#0ea5e9',
+                            '#38bdf8'
+                        ],
+                        borderColor: '#ffffff',
+                        borderWidth: 3,
+                        hoverOffset: 15
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Carbon Breakdown: Best Renovation vs Best New Build',
+                            font: { size: 18, weight: 'bold' },
+                            color: '#1f2937',
+                            padding: { bottom: 20 }
+                        },
+                        legend: {
+                            display: true,
+                            position: 'right',
+                            labels: {
+                                font: { size: 11, weight: '600' },
+                                padding: 12,
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(31, 41, 55, 0.95)',
+                            titleFont: { size: 14, weight: 'bold' },
+                            bodyFont: { size: 13 },
                             padding: 12,
-                            usePointStyle: true,
-                            pointStyle: 'circle'
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(31, 41, 55, 0.95)',
-                        titleFont: { size: 14, weight: 'bold' },
-                        bodyFont: { size: 13 },
-                        padding: 12,
-                        cornerRadius: 8,
-                        callbacks: {
-                            label: function(context) {
-                                const value = context.parsed;
-                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                const percentage = ((value / total) * 100).toFixed(1);
-                                return context.label + ': ' + value.toLocaleString() + 
-                                       ' tCO₂e (' + percentage + '%)';
+                            cornerRadius: 8,
+                            callbacks: {
+                                label: function(context) {
+                                    const value = context.parsed;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((value / total) * 100).toFixed(1);
+                                    return context.label + ': ' + value.toLocaleString() + 
+                                           ' tCO₂e (' + percentage + '%)';
+                                }
                             }
                         }
                     }
                 }
-            }
-        });
+            });
+            
+            console.log('✅ PIE CHART created successfully!', pieChart);
+            
+        } catch (error) {
+            console.error('❌ Error creating pie chart:', error);
+        }
     }
 
     /* ========================================
        LINE CHART - TIMELINE (CUMULATIVE)
        ======================================== */
     function createLineChart() {
+        console.log('📊 Creating LINE CHART...');
+        
         const ctx = document.getElementById('lineChart');
-        if (!ctx || !resultsData) return;
+        
+        if (!ctx) {
+            console.error('❌ Canvas element #lineChart NOT FOUND in DOM!');
+            return;
+        }
+        
+        console.log('✅ Canvas #lineChart found:', ctx);
+        
+        if (!resultsData || !resultsData.allScenarios || !resultsData.inputs) {
+            console.error('❌ resultsData incomplete');
+            return;
+        }
 
         const scenarios = resultsData.allScenarios;
         const lifespan = resultsData.inputs.lifespan;
         
-        // Generate years array (0 to lifespan)
+        console.log('✅ Creating timeline for', lifespan, 'years');
+        
         const years = Array.from({ length: Math.min(lifespan + 1, 101) }, (_, i) => i);
         
-        // Calculate cumulative carbon for each scenario
-        const datasets = Object.keys(scenarios).map((key, index) => {
-            const scenario = scenarios[key];
+        const datasets = scenarios.map((scenario, index) => {
             const embodied = scenario.embodiedCarbon;
             const operationalPerYear = scenario.operationalCarbon / lifespan;
             
@@ -266,19 +378,25 @@ const ChartsModule = (function() {
             );
             
             const isRenovation = scenario.category === 'renovation';
-            const renovationColors = ['#10b981', '#34d399', '#6ee7b7'];
+            
+            const renovationColors = ['#10b981', '#34d399', '#6ee7b7', '#a7f3d0'];
             const newbuildColors = ['#0ea5e9', '#38bdf8', '#7dd3fc'];
             
-            const colorArray = isRenovation ? renovationColors : newbuildColors;
-            const colorIndex = isRenovation ? index : (index - 3);
-            const color = colorArray[colorIndex % colorArray.length];
+            let color;
+            if (isRenovation) {
+                const renovationIndex = ['light-renovation', 'medium-renovation', 'deep-renovation', 'deep-renovation-demolition'].indexOf(scenario.name);
+                color = renovationColors[renovationIndex >= 0 ? renovationIndex : 0];
+            } else {
+                const newbuildIndex = ['code-compliant-new', 'high-performance-new', 'low-carbon-new'].indexOf(scenario.name);
+                color = newbuildColors[newbuildIndex >= 0 ? newbuildIndex : 0];
+            }
             
             return {
-                label: scenario.name,
+                label: scenario.displayName,
                 data: cumulativeData,
                 borderColor: color,
                 backgroundColor: color + '20',
-                borderWidth: 3,
+                borderWidth: 2.5,
                 tension: 0.4,
                 fill: false,
                 pointRadius: 0,
@@ -289,122 +407,148 @@ const ChartsModule = (function() {
             };
         });
 
-        lineChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: years.map(y => 'Year ' + y),
-                datasets: datasets
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                interaction: {
-                    mode: 'index',
-                    intersect: false,
+        console.log('✅ Created', datasets.length, 'datasets for line chart');
+
+        try {
+            lineChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: years.map(y => 'Year ' + y),
+                    datasets: datasets
                 },
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Cumulative Carbon Over Building Lifespan',
-                        font: { size: 18, weight: 'bold' },
-                        color: '#1f2937',
-                        padding: { bottom: 20 }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
                     },
-                    legend: {
-                        display: true,
-                        position: 'top',
-                        labels: {
-                            font: { size: 10, weight: '600' },
-                            padding: 8,
-                            usePointStyle: true,
-                            pointStyle: 'line',
-                            boxWidth: 30
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(31, 41, 55, 0.95)',
-                        titleFont: { size: 13, weight: 'bold' },
-                        bodyFont: { size: 12 },
-                        padding: 10,
-                        cornerRadius: 8,
-                        callbacks: {
-                            label: function(context) {
-                                return context.dataset.label + ': ' + 
-                                       context.parsed.y.toLocaleString() + ' tCO₂e';
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        grid: { display: false },
-                        ticks: {
-                            font: { size: 10 },
-                            color: '#6b7280',
-                            maxTicksLimit: 15,
-                            callback: function(value, index) {
-                                const year = years[index];
-                                // Show every 5 or 10 years depending on lifespan
-                                const interval = lifespan > 50 ? 10 : 5;
-                                return year % interval === 0 ? 'Year ' + year : '';
-                            }
-                        }
-                    },
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            color: '#e5e7eb',
-                            lineWidth: 1
-                        },
-                        ticks: {
-                            font: { size: 11 },
-                            color: '#6b7280',
-                            callback: function(value) {
-                                if (value >= 1000) {
-                                    return (value / 1000).toFixed(0) + 'k';
-                                }
-                                return value.toLocaleString();
-                            }
-                        },
+                    plugins: {
                         title: {
                             display: true,
-                            text: 'Cumulative Carbon (tCO₂e)',
-                            font: { size: 12, weight: '600' },
-                            color: '#374151'
+                            text: 'Cumulative Carbon Over Building Lifespan (7 Scenarios)',
+                            font: { size: 18, weight: 'bold' },
+                            color: '#1f2937',
+                            padding: { bottom: 20 }
+                        },
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                font: { size: 9, weight: '600' },
+                                padding: 6,
+                                usePointStyle: true,
+                                pointStyle: 'line',
+                                boxWidth: 25
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(31, 41, 55, 0.95)',
+                            titleFont: { size: 13, weight: 'bold' },
+                            bodyFont: { size: 12 },
+                            padding: 10,
+                            cornerRadius: 8,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + 
+                                           context.parsed.y.toLocaleString() + ' tCO₂e';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: {
+                                font: { size: 10 },
+                                color: '#6b7280',
+                                maxTicksLimit: 15,
+                                callback: function(value, index) {
+                                    const year = years[index];
+                                    const interval = lifespan > 50 ? 10 : 5;
+                                    return year % interval === 0 ? 'Year ' + year : '';
+                                }
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: '#e5e7eb',
+                                lineWidth: 1
+                            },
+                            ticks: {
+                                font: { size: 11 },
+                                color: '#6b7280',
+                                callback: function(value) {
+                                    if (value >= 1000) {
+                                        return (value / 1000).toFixed(0) + 'k';
+                                    }
+                                    return value.toLocaleString();
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: 'Cumulative Carbon (tCO₂e)',
+                                font: { size: 12, weight: '600' },
+                                color: '#374151'
+                            }
                         }
                     }
                 }
-            }
-        });
+            });
+            
+            console.log('✅ LINE CHART created successfully!', lineChart);
+            
+        } catch (error) {
+            console.error('❌ Error creating line chart:', error);
+        }
     }
 
     /* ========================================
-       COMPARISON TABLE - 6 SCENARIOS
+       COMPARISON TABLE - 7 SCENARIOS
        ======================================== */
     function createComparisonTable() {
+        console.log('📊 Creating COMPARISON TABLE...');
+        
         const table = document.getElementById('comparisonTable');
-        if (!table || !resultsData) return;
-
+        
+        if (!table) {
+            console.error('❌ Table element #comparisonTable NOT FOUND in DOM!');
+            return;
+        }
+        
+        console.log('✅ Table #comparisonTable found:', table);
+        
         const tbody = table.querySelector('tbody');
-        tbody.innerHTML = ''; // Clear existing
+        
+        if (!tbody) {
+            console.error('❌ Table tbody NOT FOUND!');
+            return;
+        }
+        
+        tbody.innerHTML = '';
+
+        if (!resultsData || !resultsData.allScenarios) {
+            console.error('❌ resultsData or allScenarios missing');
+            return;
+        }
 
         const scenarios = resultsData.allScenarios;
-        const scenarioKeys = Object.keys(scenarios);
         
-        // Encontrar o melhor (menor) valor de cada métrica
-        const bestEmbodied = Math.min(...scenarioKeys.map(k => scenarios[k].embodiedCarbon));
-        const bestOperational = Math.min(...scenarioKeys.map(k => scenarios[k].operationalCarbon));
-        const bestTotal = Math.min(...scenarioKeys.map(k => scenarios[k].totalCarbon));
+        console.log('✅ Creating table for', scenarios.length, 'scenarios');
+        
+        const bestEmbodied = Math.min(...scenarios.map(s => s.embodiedCarbon));
+        const bestOperational = Math.min(...scenarios.map(s => s.operationalCarbon));
+        const bestTotal = Math.min(...scenarios.map(s => s.totalCarbon));
 
         // Row 1: Total Carbon
         const totalRow = document.createElement('tr');
         totalRow.innerHTML = `
             <td class="metric-name"><strong>Total Carbon</strong></td>
-            ${scenarioKeys.map(key => {
-                const value = scenarios[key].totalCarbon;
-                const isBest = value === bestTotal;
+            ${scenarios.map(s => {
+                const isBest = s.totalCarbon === bestTotal;
                 return `<td class="${isBest ? 'best-value' : ''}">
-                    ${value.toLocaleString()} tCO₂e
+                    ${s.totalCarbon.toLocaleString()} tCO₂e
                     ${isBest ? ' <span style="color: #10b981;">✓</span>' : ''}
                 </td>`;
             }).join('')}
@@ -415,11 +559,10 @@ const ChartsModule = (function() {
         const embodiedRow = document.createElement('tr');
         embodiedRow.innerHTML = `
             <td class="metric-name">Embodied Carbon</td>
-            ${scenarioKeys.map(key => {
-                const value = scenarios[key].embodiedCarbon;
-                const isBest = value === bestEmbodied;
+            ${scenarios.map(s => {
+                const isBest = s.embodiedCarbon === bestEmbodied;
                 return `<td class="${isBest ? 'best-value' : ''}">
-                    ${value.toLocaleString()} tCO₂e
+                    ${s.embodiedCarbon.toLocaleString()} tCO₂e
                     ${isBest ? ' <span style="color: #10b981;">✓</span>' : ''}
                 </td>`;
             }).join('')}
@@ -430,11 +573,10 @@ const ChartsModule = (function() {
         const operationalRow = document.createElement('tr');
         operationalRow.innerHTML = `
             <td class="metric-name">Operational Carbon</td>
-            ${scenarioKeys.map(key => {
-                const value = scenarios[key].operationalCarbon;
-                const isBest = value === bestOperational;
+            ${scenarios.map(s => {
+                const isBest = s.operationalCarbon === bestOperational;
                 return `<td class="${isBest ? 'best-value' : ''}">
-                    ${value.toLocaleString()} tCO₂e
+                    ${s.operationalCarbon.toLocaleString()} tCO₂e
                     ${isBest ? ' <span style="color: #10b981;">✓</span>' : ''}
                 </td>`;
             }).join('')}
@@ -445,11 +587,13 @@ const ChartsModule = (function() {
         const categoryRow = document.createElement('tr');
         categoryRow.innerHTML = `
             <td class="metric-name">Category</td>
-            ${scenarioKeys.map(key => 
-                `<td style="font-weight: 500;">${scenarios[key].category === 'renovation' ? '🔨 Renovation' : '🏗️ New Build'}</td>`
+            ${scenarios.map(s => 
+                `<td style="font-weight: 500;">${s.category === 'renovation' ? '🔨 Renovation' : '🏗️ New Build'}</td>`
             ).join('')}
         `;
         tbody.appendChild(categoryRow);
+        
+        console.log('✅ TABLE created successfully with 4 rows and', scenarios.length, 'columns');
     }
 
     /* ========================================
@@ -464,4 +608,4 @@ const ChartsModule = (function() {
 // Expose to global scope
 window.ChartsModule = ChartsModule;
 
-console.log('✨ Charts module loaded (6 scenarios support with custom material dropdown)');
+console.log('✨ Charts module loaded with FULL DEBUG (7 scenarios support)');
