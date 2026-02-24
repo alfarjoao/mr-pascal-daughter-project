@@ -1,0 +1,82 @@
+{
+  "cold": {
+    "id": "cold",
+    "name": "Cold Climate",
+    "description": "Heating-dominated climate (Northern Europe, Scandinavia)",
+    "operationalFactor": 1.2,
+    "heatingDegreeDays": ">4000 HDD",
+    "characteristics": [
+      "High heating demand (Oct-Apr)",
+      "Low cooling demand",
+      "Focus on insulation and airtightness",
+      "Risk of thermal bridging"
+    ],
+    "typicalEnergyUse": "150-250 kWh/m²/year",
+    "regions": [
+      "Scandinavia",
+      "Northern UK",
+      "Northern Germany",
+      "Baltic States"
+    ]
+  },
+  "temperate": {
+    "id": "temperate",
+    "name": "Temperate Climate",
+    "description": "Balanced heating and cooling needs (Central Europe)",
+    "operationalFactor": 1.0,
+    "heatingDegreeDays": "2000-4000 HDD",
+    "characteristics": [
+      "Moderate heating demand (Nov-Mar)",
+      "Moderate cooling demand (Jun-Aug)",
+      "Balanced energy strategy",
+      "Four distinct seasons"
+    ],
+    "typicalEnergyUse": "100-150 kWh/m²/year",
+    "regions": [
+      "Central Europe",
+      "France",
+      "Belgium",
+      "Netherlands",
+      "Southern UK"
+    ]
+  },
+  "warm": {
+    "id": "warm",
+    "name": "Warm Climate",
+    "description": "Cooling-dominated with mild winters (Mediterranean)",
+    "operationalFactor": 0.9,
+    "heatingDegreeDays": "1000-2000 HDD",
+    "characteristics": [
+      "Low heating demand (Dec-Feb)",
+      "High cooling demand (May-Sep)",
+      "Solar control critical",
+      "Natural ventilation potential"
+    ],
+    "typicalEnergyUse": "80-120 kWh/m²/year",
+    "regions": [
+      "Southern Spain",
+      "Southern Italy",
+      "Greece",
+      "Southern Portugal"
+    ]
+  },
+  "hot": {
+    "id": "hot",
+    "name": "Hot Climate",
+    "description": "Extreme cooling demand, minimal heating (North Africa, Middle East)",
+    "operationalFactor": 1.1,
+    "heatingDegreeDays": "<1000 HDD",
+    "characteristics": [
+      "Minimal to no heating demand",
+      "Very high cooling demand year-round",
+      "Solar radiation management",
+      "Humidity control"
+    ],
+    "typicalEnergyUse": "120-200 kWh/m²/year (cooling-dominated)",
+    "regions": [
+      "North Africa",
+      "Middle East",
+      "Southern Mediterranean"
+    ]
+  }
+}

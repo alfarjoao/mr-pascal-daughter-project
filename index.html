@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary Meta Tags -->
+    <title>SustainaBuild | Renovation vs Demolition Carbon Calculator</title>
+    <meta name="title" content="SustainaBuild | Renovation vs Demolition Carbon Calculator">
+    <meta name="description" content="Free evidence-based carbon calculator for building renovation vs demolition decisions. Multi-variable whole-life carbon analysis tool for architects, engineers, and sustainability professionals.">
+    <meta name="keywords" content="carbon calculator, embodied carbon, operational carbon, renovation, demolition, sustainability, net zero, building lifecycle assessment, LCA, whole-life carbon, construction emissions">
+    <meta name="author" content="Valentine Lhoest, João Alfar">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sustainability-framework.vercel.app/">
+    <meta property="og:title" content="SustainaBuild | Renovation vs Demolition Carbon Calculator">
+    <meta property="og:description" content="Should you renovate or demolish? Get data-driven carbon insights in 60 seconds. Save up to 40% embodied carbon with the right choice.">
+    <meta property="og:image" content="https://sustainability-framework.vercel.app/og-image.png">
+    <meta property="og:site_name" content="SustainaBuild">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://sustainability-framework.vercel.app/">
+    <meta property="twitter:title" content="SustainaBuild | Renovation vs Demolition Carbon Calculator">
+    <meta property="twitter:description" content="Should you renovate or demolish? Get data-driven carbon insights in 60 seconds.">
+    <meta property="twitter:image" content="https://sustainability-framework.vercel.app/og-image.png">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://sustainability-framework.vercel.app/">
+    
+    <!-- Favicon (SVG inline) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='20' y='35' width='35' height='45' fill='%23047857' rx='2'/%3E%3Crect x='45' y='30' width='35' height='50' fill='%2310b981' rx='2'/%3E%3Cpath d='M50 5 L50 25 L60 20 L50 5 L40 20 Z' fill='%2310b981'/%3E%3Ccircle cx='50' cy='15' r='3' fill='%23059669'/%3E%3C/svg%3E">
+    <link rel="alternate icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAIBSURBVHja7JaxS8NAFMa/l6RJk9YqVpyKk4ODunRwcBGc/QMEwUkQnPwDnB0V/ANEcHJwcVAHQRDBxUlxsIODQ0G0WlNTm+Ry5i6XJk1zrdCpH3yQkLu8+33v3r0LYf5jGP8TgBBC/hcA4zjO/wRwOBz+JwCO4/6fACzL+p8AEokE+HX2DAAA">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/main.css">
+    
+    <!-- Preconnect to external CDNs for performance -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+</head>
+
+<body>
+    <!-- Announcement Bar -->
+    <div class="announcement-bar">
+        <span class="announcement-badge">New</span>
+        <span>Research-backed framework now available for professional use</span>
+        <a href="#methodology">Learn More →</a>
+    </div>
+
+    <!-- Top Header -->
+    <div class="top-header">
+        <div class="top-header-container">
+            <div class="top-header-left">
+                <a href="mailto:valentine.lhoest1@gmail.com">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 8L10.89 13.26C11.2187 13.4793 11.6049 13.5963 12 13.5963C12.3951 13.5963 12.7813 13.4793 13.11 13.26L21 8M5 19H19C19.5304 19 20.0391 18.7893 20.4142 18.4142C20.7893 18.0391 21 17.5304 21 17V7C21 6.46957 20.7893 5.96086 20.4142 5.58579C20.0391 5.21071 19.5304 5 19 5H5C4.46957 5 3.96086 5.21071 3.58579 5.58579C3.21071 5.96086 3 6.46957 3 7V17C3 17.5304 3.21071 18.0391 3.58579 18.4142C3.96086 18.7893 4.46957 19 5 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    valentine.lhoest1@gmail.com
+                </a>
+            </div>
+            <div class="top-header-right">
+                <div class="lang-selector">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                        <path d="M2 12H22" stroke="currentColor" stroke-width="2"/>
+                        <path d="M12 2C14.5 4.5 16 8 16 12C16 16 14.5 19.5 12 22C9.5 19.5 8 16 8 12C8 8 9.5 4.5 12 2Z" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    <span>EN</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation (HEADER MODIFICADO - SEM LOGO, MENU CENTRALIZADO) -->
+    <nav>
+        <div class="container nav-container">
+            <!-- Desktop Navigation (CENTRALIZADO) -->
+            <div class="nav-links desktop-nav">
+                <a href="#calculator">Calculator</a>
+                <a href="#methodology">Methodology</a>
+                <a href="#faq">FAQ</a>
+                <a href="#about">About</a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Overlay -->
+        <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+
+        <!-- Mobile Menu Drawer -->
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="mobile-menu-header">
+                <a href="#hero" class="mobile-brand">SustainaBuild</a>
+                <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Close menu">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+            <nav class="mobile-nav-links">
+                <a href="#hero" class="mobile-nav-link">
+                    <span class="mobile-nav-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    <span>Home</span>
+                </a>
+                <a href="#calculator" class="mobile-nav-link">
+                    <span class="mobile-nav-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="4" y="2" width="16" height="20" rx="2" stroke="currentColor" stroke-width="2"/>
+                            <line x1="8" y1="6" x2="16" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <line x1="8" y1="10" x2="16" y2="10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <line x1="8" y1="14" x2="12" y2="14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <line x1="8" y1="18" x2="12" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <circle cx="15" cy="16" r="1.5" fill="currentColor"/>
+                        </svg>
+                    </span>
+                    <span>Calculator</span>
+                </a>
+                <a href="#results" class="mobile-nav-link">
+                    <span class="mobile-nav-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18 20V10M12 20V4M6 20V14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    <span>Results</span>
+                </a>
+                <a href="#methodology" class="mobile-nav-link">
+                    <span class="mobile-nav-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4 19.5C4 18.837 4.26339 18.2011 4.73223 17.7322C5.20107 17.2634 5.83696 17 6.5 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M6.5 2H20V22H6.5C5.83696 22 5.20107 21.7366 4.73223 21.2678C4.26339 20.7989 4 20.163 4 19.5V4.5C4 3.83696 4.26339 3.20107 4.73223 2.73223C5.20107 2.26339 5.83696 2 6.5 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    <span>Methodology</span>
+                </a>
+                <a href="#faq" class="mobile-nav-link">
+                    <span class="mobile-nav-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                            <path d="M9.09 9C9.3251 8.33167 9.78915 7.76811 10.4 7.40913C11.0108 7.05016 11.7289 6.91894 12.4272 7.03871C13.1255 7.15849 13.7588 7.52152 14.2151 8.06353C14.6713 8.60553 14.9211 9.29152 14.92 10C14.92 12 11.92 13 11.92 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 17H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    <span>FAQ</span>
+                </a>
+                <a href="#about" class="mobile-nav-link">
+                    <span class="mobile-nav-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 16V12M12 8H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                    <span>About</span>
+                </a>
+            </nav>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+<section id="home" class="hero" role="banner">
+    <div class="hero-container">
+        <div class="hero-content">
+            <div class="hero-badge" role="status" aria-label="Evidence-based framework badge">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Evidence-Based Framework
+            </div>
+            <h1>Should you <span class="highlight">renovate</span> or demolish?</h1>
+            <p class="hero-subtitle">Get data-driven carbon insights in 60 seconds. Compare renovation versus new build scenarios and save up to 40% embodied carbon with the right choice.</p>
+            
+            <div class="hero-stats" role="region" aria-label="Key statistics">
+                <div class="hero-stat">
+                    <span class="hero-stat-number" aria-label="40 percent">40%</span>
+                    <span class="hero-stat-label">of global CO₂ from buildings</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-number" aria-label="100 percent">100%</span>
+                    <span class="hero-stat-label">Whole-Life Carbon Analysis</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-number">Net Zero</span>
+                    <span class="hero-stat-label">2050 Aligned</span>
+                </div>
+            </div>
+
+            <div class="cta-buttons" role="navigation" aria-label="Primary actions">
+                <a href="#calculator" class="btn-primary" aria-label="Start carbon analysis calculator">
+                    Start Free Analysis
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+                <a href="#methodology" class="btn-secondary" aria-label="View research methodology">View Methodology</a>
+            </div>
+        </div>
+        
+        <div class="hero-visual" role="img" aria-label="Illustration comparing renovation and new build options">
+            <div style="width: 100%; max-width: 550px; height: 450px; background: white; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.12); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center;">
+                <svg width="200" height="160" viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Building comparison graphic">
+                    <title>Renovation versus new build comparison</title>
+                    <rect x="40" y="60" width="60" height="80" stroke="#047857" stroke-width="3" fill="#f0fdf4"/>
+                    <rect x="100" y="60" width="60" height="80" stroke="#0891b2" stroke-width="3" fill="#ecfeff"/>
+                    <circle cx="100" cy="30" r="15" stroke="#10b981" stroke-width="3" fill="none"/>
+                    <path d="M110 20L115 15L115 25Z" fill="#10b981"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- Trust Bar -->
+    <section class="trust-bar">
+        <div class="trust-container">
+            <div class="trust-label">Trusted By Leading Organizations</div>
+            <div class="trust-badges">
+                <div class="trust-badge">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 15C15.866 15 19 11.866 19 8C19 4.13401 15.866 1 12 1C8.13401 1 5 4.13401 5 8C5 11.866 8.13401 15 12 15Z" stroke="currentColor" stroke-width="2"/>
+                        <path d="M8.21 13.89L7 23L12 20L17 23L15.79 13.88" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Research-Backed
+                </div>
+                <div class="trust-badge">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    LCA Verified
+                </div>
+                <div class="trust-badge">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Multi-Variable
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem-section">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-eyebrow">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                        <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    The Global Challenge
+                </div>
+                <h2 class="section-title">Understanding the Carbon Imperative</h2>
+                <p class="section-description">The construction industry stands at a critical crossroads. With nearly 40% of global CO₂ emissions attributed to buildings, the decisions we make today will determine our climate future.</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="stat-card-value">11 Gt</div>
+                    <div class="stat-card-label">Annual Building Emissions</div>
+                    <p class="stat-card-description">Global carbon footprint from construction and building operations annually</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 3V16C3 16.5304 3.21071 17.0391 3.58579 17.4142C3.96086 17.7893 4.46957 18 5 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M18 9L13 14L9 10L3 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="stat-card-value">28%</div>
+                    <div class="stat-card-label">Embodied Carbon Share</div>
+                    <p class="stat-card-description">Proportion of whole-life carbon from materials and construction</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="stat-card-value">50+ Years</div>
+                    <div class="stat-card-label">Typical Building Lifespan</div>
+                    <p class="stat-card-description">Average operational period for carbon impact assessment</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-eyebrow">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                        <line x1="3" y1="9" x2="21" y2="9" stroke="currentColor" stroke-width="2"/>
+                        <line x1="9" y1="21" x2="9" y2="9" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    Comprehensive Framework
+                </div>
+                <h2 class="section-title">Evidence-Based Decision Making</h2>
+                <p class="section-description">A systematic approach to evaluating renovation versus demolition through multi-variable carbon analysis</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                            <line x1="3" y1="9" x2="21" y2="9" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <h3>Multi-Variable Analysis</h3>
+                    <p>Comprehensive evaluation of embodied carbon, operational efficiency, material reuse rates, and lifecycle considerations</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <h3>Research-Based Methodology</h3>
+                    <p>Built on systematic LCA review ensuring scientific rigor and evidence-based recommendations</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>Rapid Assessment</h3>
+                    <p>Complete comprehensive building carbon analysis in under 5 minutes with immediate results</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+  <!-- CALCULATOR SECTION (ATUALIZADO COM DADOS REAIS DA VALENTINE + REUSE RATE) -->
+<section id="calculator" class="calculator-section">
+    <div class="section-container">
+        <div class="section-header">
+            <div class="section-eyebrow">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                    <line x1="3" y1="9" x2="21" y2="9" stroke="currentColor" stroke-width="2"/>
+                </svg>
+                Carbon Calculator
+            </div>
+            <h2 class="section-title">Start Your Analysis</h2>
+            <p class="section-description">Complete assessment in 2 simple steps</p>
+        </div>
+
+        <div class="calculator-card">
+            <form id="calculator-form">
+                <!-- Step 1: Building Inputs -->
+                <div class="form-section active" data-section="1">
+                    <div class="form-section-header">
+                        <h3 class="form-section-title">Building Inputs</h3>
+                        <p class="form-section-description">Enter key building characteristics</p>
+                    </div>
+
+                    <!-- ✅ PROGRAM TYPE (NOVO - 4 OPÇÕES DA VALENTINE) -->
+                    <div class="form-group">
+                        <label class="form-label" for="building-type">
+                            Program Type <span class="required-asterisk">*</span>
+                        </label>
+                        <span class="form-help">Primary building use determines operational energy baseline</span>
+                        <select id="building-type" name="buildingType" class="form-select" required>
+                            <option value="">Select program type...</option>
+                            <option value="office">Office/Commercial (350 kWh/m²/yr baseline)</option>
+                            <option value="residential">Residential (250 kWh/m²/yr baseline)</option>
+                            <option value="institutional">Institutional (450 kWh/m²/yr baseline)</option>
+                            <option value="industrial">Industrial (700 kWh/m²/yr baseline)</option>
+                        </select>
+                        <span class="input-error-message"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="building-area">
+                            Building Area <span class="required-asterisk">*</span>
+                        </label>
+                        <span class="form-help">Total gross floor area (m²)</span>
+                        <select id="building-area" name="buildingArea" class="form-select" required>
+                            <option value="">Select area...</option>
+                            <option value="75">50–100 m²</option>
+                            <option value="300">100–500 m²</option>
+                            <option value="750">500–1,000 m²</option>
+                            <option value="2500">1,000–5,000 m²</option>
+                            <option value="7500">5,000–10,000 m²</option>
+                            <option value="30000">10,000–50,000 m²</option>
+                            <option value="75000">50,000–100,000 m²</option>
+                        </select>
+                        <span class="input-error-message"></span>
+                    </div>
+
+                    <!-- ✅ MATERIAL MULTI-SELECT DROPDOWN (CUSTOM COM CHECKBOXES) -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            Structural Materials <span class="required-asterisk">*</span>
+                        </label>
+                        <span class="form-help">Select one or multiple materials</span>
+                        
+                        <div class="custom-multiselect" id="material-dropdown">
+                            <div class="multiselect-trigger" tabindex="0">
+                                <span class="multiselect-placeholder">Select materials...</span>
+                                <svg class="multiselect-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M19 9L12 16L5 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            
+                            <div class="multiselect-dropdown" style="display: none;">
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="structuralMaterials" value="concrete">
+                                    <span class="checkbox-custom"></span>
+                                    <span class="checkbox-label">Concrete</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="structuralMaterials" value="steel">
+                                    <span class="checkbox-custom"></span>
+                                    <span class="checkbox-label">Steel</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="structuralMaterials" value="timber">
+                                    <span class="checkbox-custom"></span>
+                                    <span class="checkbox-label">Timber</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="structuralMaterials" value="masonry">
+                                    <span class="checkbox-custom"></span>
+                                    <span class="checkbox-label">Masonry</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="structuralMaterials" value="mixed">
+                                    <span class="checkbox-custom"></span>
+                                    <span class="checkbox-label">Mixed/Other</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <span class="input-error-message"></span>
+                    </div>
+
+                    <!-- ✅ CLIMATE ZONE (ATUALIZADO - 6 OPÇÕES DA VALENTINE) -->
+                    <div class="form-group">
+                        <label class="form-label" for="climate-zone">
+                            Climate Zone <span class="required-asterisk">*</span>
+                        </label>
+                        <span class="form-help">Local climate affects operational energy requirements</span>
+                        <select id="climate-zone" name="climateZone" class="form-select" required>
+                            <option value="">Select climate...</option>
+                            <option value="temperate">Temperate (baseline: 1.00×)</option>
+                            <option value="cold">Cold (factor: 1.27×)</option>
+                            <option value="hot-dry">Hot-Dry (factor: 0.92×)</option>
+                            <option value="hot-humid">Hot-Humid (factor: 0.95×)</option>
+                            <option value="coastal">Coastal (factor: 0.85×)</option>
+                            <option value="mountain">Mountain (factor: 1.13×)</option>
+                        </select>
+                        <span class="input-error-message"></span>
+                    </div>
+                </div>
+
+                <!-- Step 2: Energy & Carbon Data -->
+                <div class="form-section" data-section="2">
+                    <div class="form-section-header">
+                        <h3 class="form-section-title">Energy & Carbon Data</h3>
+                        <p class="form-section-description">Provide energy performance metrics (or let us estimate)</p>
+                    </div>
+
+                    <!-- ✅ EMBODIED ENERGY COM "UNKNOWN" OPTION -->
+                    <div class="form-group">
+                        <label class="form-label" for="embodied-energy">
+                            Embodied Energy Baseline <span class="required-asterisk">*</span>
+                        </label>
+                        <span class="form-help">Total embodied energy of existing building (MJ/m²)</span>
+                        <select id="embodied-energy" name="embodiedEnergy" class="form-select" required>
+                            <option value="">Select baseline...</option>
+                            <option value="unknown">Unknown (help me estimate)</option>
+                            <option value="7500">7,500 MJ/m² (light construction)</option>
+                            <option value="9000">9,000 MJ/m² (medium construction)</option>
+                            <option value="10500">10,500 MJ/m² (heavy construction)</option>
+                        </select>
+                        <span class="input-error-message"></span>
+                    </div>
+
+                    <!-- ✅ CONTEXT SELECTOR (APARECE QUANDO "UNKNOWN" SELECIONADO) -->
+                    <div class="form-group" id="embodied-context-group" style="display: none;">
+                        <label class="form-label" for="embodied-context">
+                            Building Context <span class="required-asterisk">*</span>
+                        </label>
+                        <span class="form-help">Help us estimate embodied energy based on construction type</span>
+                        <select id="embodied-context" name="embodiedContext" class="form-select">
+                            <option value="">Select context...</option>
+                            <option value="light-construction">Light Construction (7,500 MJ/m²)</option>
+                            <option value="medium-construction">Medium Construction (9,000 MJ/m²)</option>
+                            <option value="heavy-construction">Heavy Construction (10,500 MJ/m²)</option>
+                            <option value="existing-building">Existing Building (7,500 MJ/m²)</option>
+                        </select>
+                        <span class="input-error-message"></span>
+                    </div>
+
+                    <!-- ✅ OPERATIONAL ENERGY COM "UNKNOWN" OPTION -->
+                    <div class="form-group">
+                        <label class="form-label" for="operational-energy">
+                            Operational Energy Baseline <span class="required-asterisk">*</span>
+                        </label>
+                        <span class="form-help">Annual energy consumption (kWh/m²/yr) - leave as "unknown" to use program type baseline</span>
+                        <select id="operational-energy" name="operationalEnergy" class="form-select" required>
+                            <option value="">Select consumption...</option>
+                            <option value="unknown">Unknown (use program type baseline)</option>
+                            <option value="20">20 kWh/m²/yr (high-performance)</option>
+                            <option value="80">80 kWh/m²/yr (code-compliant)</option>
+                            <option value="150">150 kWh/m²/yr (existing standard)</option>
+                            <option value="275">275 kWh/m²/yr (poor performance)</option>
+                        </select>
+                        <span class="input-error-message"></span>
+                    </div>
+
+                    <!-- ✅ CONTEXT SELECTOR (APARECE QUANDO "UNKNOWN" SELECIONADO) -->
+                    <div class="form-group" id="operational-context-group" style="display: none;">
+                        <label class="form-label" for="operational-context">
+                            Building Performance <span class="required-asterisk">*</span>
+                        </label>
+                        <span class="form-help">Help us estimate operational energy based on performance level</span>
+                        <select id="operational-context" name="operationalContext" class="form-select">
+                            <option value="">Select performance...</option>
+                            <option value="high-performance">High-Performance (20 kWh/m²/yr)</option>
+                            <option value="code-compliant">Code-Compliant (80 kWh/m²/yr)</option>
+                            <option value="existing-standard">Existing Standard (150 kWh/m²/yr)</option>
+                            <option value="poor-performance">Poor Performance (275 kWh/m²/yr)</option>
+                        </select>
+                        <span class="input-error-message"></span>
+                    </div>
+
+                    <!-- ✅ MATERIAL REUSE RATE (ADICIONADO DE VOLTA) -->
+                    <div class="form-group">
+                        <label class="form-label" for="reuse-rate">
+                            Material Reuse Rate <span class="required-asterisk">*</span>
+                        </label>
+                        <span class="form-help">Percentage of existing materials retained/reused (0% = full demolition, 90% = maximum retention)</span>
+                        <select id="reuse-rate" name="reuseRate" class="form-select" required>
+                            <option value="">Select reuse rate...</option>
+                            <option value="0">0% (Complete Demolition)</option>
+                            <option value="10">10%</option>
+                            <option value="20">20%</option>
+                            <option value="30">30%</option>
+                            <option value="40">40%</option>
+                            <option value="50">50%</option>
+                            <option value="60">60%</option>
+                            <option value="70">70%</option>
+                            <option value="80">80%</option>
+                            <option value="90">90% (Maximum Retention)</option>
+                        </select>
+                        <span class="input-error-message"></span>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="form-navigation">
+                    <button type="button" class="btn btn-secondary" id="btn-back" style="display: none;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Back
+                    </button>
+                    <button type="button" class="btn btn-primary" id="btn-next">
+                        Next Step
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- RESULTS SECTION (ATUALIZADO PARA MJ EM VEZ DE tCO₂e) -->
+<section id="results" style="display: none;">
+    <div class="container">
+        
+        <!-- Compact Header -->
+        <div class="results-compact-header">
+            <div class="decision-badge-compact" id="decisionBadge">
+                <span class="decision-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+                <div>
+                    <span class="decision-text" id="decisionText">RENOVATE</span>
+                    <p class="decision-subtitle" id="resultsTitle">Medium Renovation is the better choice</p>
+                </div>
+            </div>
+            
+            <div class="savings-compact">
+                <span class="savings-label">Energy Savings</span>
+                <span class="savings-value">
+                    <strong id="savingsAmount">5,700 MJ</strong>
+                    <span class="savings-percent" id="savingsPercent">(31%)</span>
+                </span>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="results-quick-stats">
+            <div class="quick-stat">
+                <span class="stat-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 16V8C20.9996 7.64927 20.9071 7.30481 20.7315 7.00116C20.556 6.69751 20.3037 6.44536 20 6.27L13 2.27C12.696 2.09446 12.3511 2.00205 12 2.00205C11.6489 2.00205 11.304 2.09446 11 2.27L4 6.27C3.69626 6.44536 3.44398 6.69751 3.26846 7.00116C3.09294 7.30481 3.00036 7.64927 3 8V16C3.00036 16.3507 3.09294 16.6952 3.26846 16.9988C3.44398 17.3025 3.69626 17.5546 4 17.73L11 21.73C11.304 21.9055 11.6489 21.9979 12 21.9979C12.3511 21.9979 12.696 21.9055 13 21.73L20 17.73C20.3037 17.5546 20.556 17.3025 20.7315 16.9988C20.9071 16.6952 20.9996 16.3507 21 16Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <polyline points="7.5 4.21 12 6.81 16.5 4.21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <polyline points="7.5 19.79 7.5 14.6 3 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <polyline points="21 12 16.5 14.6 16.5 19.79" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <line x1="12" y1="22.08" x2="12" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+                <div class="stat-content">
+                    <span class="stat-label">Best Renovation</span>
+                    <span class="stat-value" id="renovationTotal">12,500</span>
+                    <span class="stat-unit">MJ</span>
+                </div>
+            </div>
+            
+            <div class="quick-stat-divider">vs</div>
+            
+            <div class="quick-stat">
+                <span class="stat-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <polyline points="9 22 9 12 15 12 15 22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+                <div class="stat-content">
+                    <span class="stat-label">Best New Build</span>
+                    <span class="stat-value" id="newbuildTotal">18,200</span>
+                    <span class="stat-unit">MJ</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Expandable Details -->
+        <details class="results-details" open>
+            <summary>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 20V10M12 20V4M6 20V14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Detailed Breakdown
+            </summary>
+            
+            <div class="details-grid">
+                <!-- Renovation Breakdown -->
+                <div class="breakdown-card">
+                    <h4>Best Renovation Energy</h4>
+                    <div class="breakdown-item">
+                        <span>Embodied:</span>
+                        <strong id="renovationEmbodied">2,500</strong> MJ
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Operational:</span>
+                        <strong id="renovationOperational">10,000</strong> MJ
+                    </div>
+                </div>
+                
+                <!-- New Build Breakdown -->
+                <div class="breakdown-card">
+                    <h4>Best New Build Energy</h4>
+                    <div class="breakdown-item">
+                        <span>Embodied:</span>
+                        <strong id="newbuildEmbodied">8,200</strong> MJ
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Operational:</span>
+                        <strong id="newbuildOperational">10,000</strong> MJ
+                    </div>
+                </div>
+            </div>
+        </details>
+
+        <!-- Charts in Tabs -->
+        <div class="charts-tabs">
+            <div class="tabs-header">
+                <button class="tab-btn active" data-tab="comparison">Comparison (7 Scenarios)</button>
+                <button class="tab-btn" data-tab="breakdown">Breakdown</button>
+                <button class="tab-btn" data-tab="timeline">Timeline</button>
+                <button class="tab-btn" data-tab="table">Table</button>
+            </div>
+            
+            <div class="tabs-content">
+                <div class="tab-pane active" id="tab-comparison">
+                    <canvas id="barChart"></canvas>
+                </div>
+                <div class="tab-pane" id="tab-breakdown">
+                    <canvas id="pieChart"></canvas>
+                </div>
+                <div class="tab-pane" id="tab-timeline">
+                    <canvas id="lineChart"></canvas>
+                </div>
+                <div id="tab-table" class="tab-pane">
+                    <div class="table-wrapper">
+                        <table id="comparisonTable">
+                            <thead>
+                                <tr>
+                                    <th>Metric</th>
+                                    <th>Light<br>Renovation</th>
+                                    <th>Medium<br>Renovation</th>
+                                    <th>Deep<br>Renovation</th>
+                                    <th>Deep + Demo</th>
+                                    <th>Code-Compliant<br>New</th>
+                                    <th>High-Performance<br>New</th>
+                                    <th>Low-Carbon<br>New</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Gerado dinamicamente pelo charts.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="results-actions-compact">
+            <button class="btn btn-primary" id="downloadPdfBtn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Download PDF
+            </button>
+            <button class="btn btn-secondary" onclick="location.reload()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1 4V10H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M23 20V14H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M20.49 9C19.9828 7.56678 19.1209 6.28536 17.9845 5.27542C16.8482 4.26548 15.4745 3.55976 13.9917 3.22426C12.5089 2.88875 10.9652 2.93434 9.50481 3.35677C8.04437 3.77921 6.71475 4.56471 5.64 5.64L1 10M23 14L18.36 18.36C17.2853 19.4353 15.9556 20.2208 14.4952 20.6432C13.0348 21.0657 11.4911 21.1112 10.0083 20.7757C8.52547 20.4402 7.1518 19.7345 6.01547 18.7246C4.87913 17.7146 4.01717 16.4332 3.51 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                New Analysis
+            </button>
+        </div>
+
+    </div>
+</section>
+
+
+
+<!-- Methodology Section -->
+<section id="methodology" class="methodology-section">
+    <div class="section-container">
+        <div class="section-header">
+            <div class="section-eyebrow">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Research Foundation
+            </div>
+            <h2 class="section-title">Our Methodology</h2>
+            <p class="section-description">Seven-scenario whole-life carbon framework for evidence-based decision making</p>
+        </div>
+
+        <!-- ✅ TABS NAVIGATION -->
+        <div class="methodology-tabs-container">
+            <div class="tabs-navigation">
+                <button class="tab-btn active" data-tab="variables">
+                    <svg class="tab-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                        <line x1="3" y1="9" x2="21" y2="9" stroke="currentColor" stroke-width="2"/>
+                        <line x1="9" y1="9" x2="9" y2="21" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    <span>Key Variables</span>
+                </button>
+                
+                <button class="tab-btn" data-tab="scenarios">
+                    <svg class="tab-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Seven Scenarios</span>
+                </button>
+                
+                <button class="tab-btn" data-tab="outcomes">
+                    <svg class="tab-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22 11.08V12C21.9988 14.1564 21.3005 16.2547 20.0093 17.9818C18.7182 19.7088 16.9033 20.9725 14.8354 21.5839C12.7674 22.1953 10.5573 22.1219 8.53447 21.3746C6.51168 20.6273 4.78465 19.2461 3.61096 17.4371C2.43727 15.628 1.87979 13.4881 2.02168 11.3363C2.16356 9.18455 2.99721 7.13631 4.39828 5.49706C5.79935 3.85781 7.69279 2.71537 9.79619 2.24013C11.8996 1.7649 14.1003 1.98232 16.07 2.85999" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M22 4L12 14.01L9 11.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Possible Outcomes</span>
+                </button>
+            </div>
+
+            <!-- ✅ TAB CONTENT: VARIABLES -->
+            <div class="tab-content active" id="tab-variables">
+                <div class="variables-grid-compact">
+                    <div class="variable-item-compact">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <div class="variable-text">
+                            <h5>Building Type</h5>
+                            <p>Office, Residential, Institutional, Industrial</p>
+                        </div>
+                    </div>
+
+                    <div class="variable-item-compact">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 16V8C20.9996 7.64927 20.9071 7.30481 20.7315 7.00116C20.556 6.69751 20.3037 6.44536 20 6.27L13 2.27C12.696 2.09446 12.3511 2.00205 12 2.00205C11.6489 2.00205 11.304 2.09446 11 2.27L4 6.27C3.69626 6.44536 3.44398 6.69751 3.26846 7.00116C3.09294 7.30481 3.00036 7.64927 3 8V16C3.00036 16.3507 3.09294 16.6952 3.26846 16.9988C3.44398 17.3025 3.69626 17.5546 4 17.73L11 21.73C11.304 21.9055 11.6489 21.9979 12 21.9979C12.3511 21.9979 12.696 21.9055 13 21.73L20 17.73C20.3037 17.5546 20.556 17.3025 20.7315 16.9988C20.9071 16.6952 20.9996 16.3507 21 16Z" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                        <div class="variable-text">
+                            <h5>Embodied Carbon</h5>
+                            <p>Material production impacts (MJ/m²)</p>
+                        </div>
+                    </div>
+
+                    <div class="variable-item-compact">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <div class="variable-text">
+                            <h5>Operational Energy</h5>
+                            <p>Annual consumption (kWh/m²/yr)</p>
+                        </div>
+                    </div>
+
+                    <div class="variable-item-compact">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1 4V10H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M23 20V14H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M20.49 9C19.9828 7.56678 19.1209 6.28536 17.9845 5.27542C16.8482 4.26548 15.4745 3.55976 13.9917 3.22426C12.5089 2.88875 10.9652 2.93434 9.50481 3.35677C8.04437 3.77921 6.71475 4.56471 5.64 5.64L1 10M23 14L18.36 18.36C17.2853 19.4353 15.9556 20.2208 14.4952 20.6432C13.0348 21.0657 11.4911 21.1112 10.0083 20.7757C8.52547 20.4402 7.1518 19.7345 6.01547 18.7246C4.87913 17.7146 4.01717 16.4332 3.51 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <div class="variable-text">
+                            <h5>Material Reuse Rate</h5>
+                            <p>Percentage retained in renovation</p>
+                        </div>
+                    </div>
+
+                    <div class="variable-item-compact">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <div class="variable-text">
+                            <h5>Building Lifespan</h5>
+                            <p>Years before next intervention</p>
+                        </div>
+                    </div>
+
+                    <div class="variable-item-compact">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <div class="variable-text">
+                            <h5>Material Type</h5>
+                            <p>Concrete, Steel, Timber, Masonry</p>
+                        </div>
+                    </div>
+
+                    <div class="variable-item-compact">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 2V6M12 18V22M22 12H18M6 12H2M19.07 4.93L16.24 7.76M7.76 16.24L4.93 19.07M19.07 19.07L16.24 16.24M7.76 7.76L4.93 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <div class="variable-text">
+                            <h5>Climate Zone</h5>
+                            <p>Temperate, Cold, Hot, Coastal, Mountain</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ✅ TAB CONTENT: SCENARIOS -->
+            <div class="tab-content" id="tab-scenarios">
+                
+                <div class="scenarios-info-banner-compact">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"></circle>
+                        <line x1="12" y1="16" x2="12" y2="12" stroke="currentColor" stroke-width="2"></line>
+                        <line x1="12" y1="8" x2="12.01" y2="8" stroke="currentColor" stroke-width="2"></line>
+                    </svg>
+                    <p>Click on any scenario to learn more about its impact.</p>
+                </div>
+
+                <div class="scenarios-list-compact">
+                    
+                    <!-- RENOVATION CATEGORY -->
+                    <div class="scenario-category-compact">
+                        <div class="category-label-compact">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M18.5 2.50023C18.8978 2.1024 19.4374 1.87891 20 1.87891C20.5626 1.87891 21.1022 2.1024 21.5 2.50023C21.8978 2.89805 22.1213 3.43762 22.1213 4.00023C22.1213 4.56284 21.8978 5.1024 21.5 5.50023L12 15.0002L8 16.0002L9 12.0002L18.5 2.50023Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Renovation Strategies
+                        </div>
+                        <div class="scenario-pills-row">
+                            <div class="scenario-pill-compact" data-scenario="light-renovation" data-category="renovation">
+                                <strong>Light</strong>
+                                <span>90% reuse</span>
+                            </div>
+                            <div class="scenario-pill-compact" data-scenario="medium-renovation" data-category="renovation">
+                                <strong>Medium</strong>
+                                <span>70% reuse</span>
+                            </div>
+                            <div class="scenario-pill-compact" data-scenario="deep-renovation" data-category="renovation">
+                                <strong>Deep</strong>
+                                <span>52.5% reuse</span>
+                            </div>
+                            <div class="scenario-pill-compact" data-scenario="deep-demolition" data-category="renovation">
+                                <strong>Deep + Demo</strong>
+                                <span>42.5% reuse</span>
+                            </div>
+                        </div>
+                        <div id="popup-renovation" class="scenario-popup-container"></div>
+                    </div>
+                    
+                    <!-- NEW BUILD CATEGORY -->
+                    <div class="scenario-category-compact">
+                        <div class="category-label-compact">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Demolish & Rebuild Standards
+                        </div>
+                        <div class="demolish-warning">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M10.29 3.86L1.82 18C1.64537 18.3024 1.55296 18.6453 1.55199 18.9945C1.55101 19.3437 1.64149 19.6871 1.81442 19.9905C1.98735 20.2939 2.23673 20.5467 2.53771 20.7239C2.83868 20.901 3.18082 20.9962 3.53 21H20.47C20.8192 20.9962 21.1613 20.901 21.4623 20.7239C21.7633 20.5467 22.0127 20.2939 22.1856 19.9905C22.3585 19.6871 22.449 19.3437 22.448 18.9945C22.447 18.6453 22.3546 18.3024 22.18 18L13.71 3.86C13.5317 3.56611 13.2807 3.32312 12.9812 3.15448C12.6817 2.98585 12.3437 2.89725 12 2.89725C11.6563 2.89725 11.3183 2.98585 11.0188 3.15448C10.7193 3.32312 10.4683 3.56611 10.29 3.86Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <line x1="12" y1="9" x2="12" y2="13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <line x1="12" y1="17" x2="12.01" y2="17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Complete demolition of existing structure</span>
+                        </div>
+                        <div class="scenario-pills-row">
+                            <div class="scenario-pill-compact" data-scenario="code-new" data-category="newbuild">
+                                <strong>Code-Compliant</strong>
+                                <span>40 yr lifespan</span>
+                            </div>
+                            <div class="scenario-pill-compact" data-scenario="highperf-new" data-category="newbuild">
+                                <strong>High-Performance</strong>
+                                <span>50 yr lifespan</span>
+                            </div>
+                            <div class="scenario-pill-compact" data-scenario="lowcarbon-new" data-category="newbuild">
+                                <strong>Low-Carbon</strong>
+                                <span>60 yr lifespan</span>
+                            </div>
+                        </div>
+                        <div id="popup-newbuild" class="scenario-popup-container"></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ✅ TAB CONTENT: OUTCOMES -->
+            <div class="tab-content" id="tab-outcomes">
+                <div class="outcomes-grid-compact">
+                    
+                    <div class="outcome-card-compact renovate">
+                        <div class="outcome-header-compact">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            <h4>RENOVATE</h4>
+                        </div>
+                        <p>Recommends one renovation strategy based on lowest whole-life carbon impact.</p>
+                        <div class="outcome-tags">
+                            <span class="tag">High reuse</span>
+                            <span class="tag">Lower embodied carbon</span>
+                            <span class="tag">17.5-35 yr lifespan</span>
+                        </div>
+                    </div>
+
+                    <div class="outcome-card-compact demolish">
+                        <div class="outcome-header-compact">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <h4>DEMOLISH & REBUILD</h4>
+                        </div>
+                        <p>Recommends one new-build standard when long-term operational savings outweigh embodied carbon costs.</p>
+                        <div class="outcome-tags">
+                            <span class="tag">Best efficiency</span>
+                            <span class="tag">Higher embodied carbon</span>
+                            <span class="tag">40-60 yr lifespan</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ✅ FRAMEWORK BANNER FORA (COLADO EMBAIXO) -->
+        <div class="methodology-framework-outside">
+            <div class="framework-badge-bottom">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                    <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Framework Overview
+            </div>
+            <h3>Systematic Comparison Framework</h3>
+            <p>This framework evaluates renovation versus demolition decisions through systematic whole-life carbon analysis, considering embodied carbon, operational energy performance, material reuse potential, and lifecycle implications across multiple building intervention strategies.</p>
+        </div>
+
+    </div>
+</section>
+
+
+    <!-- About Section -->
+    <section id="about" class="features-section">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-eyebrow">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    About This Project
+                </div>
+                <h2 class="section-title">Academic Research Tool</h2>
+                <p class="section-description">Developed to support evidence-based decision-making in sustainable building practices</p>
+            </div>
+
+            <div style="max-width: 800px; margin: 4rem auto 0; background: white; padding: 3rem; border-radius: 12px; border: 1px solid var(--border);">
+                <p style="font-size: 1.1rem; line-height: 1.8; color: var(--text); margin-bottom: 2rem;">
+                    This tool was developed as part of a master's thesis examining the carbon implications of building renovation versus demolition decisions. The framework synthesizes current research in lifecycle assessment and provides practitioners with accessible, evidence-based guidance for achieving Net Zero 2050 goals in the built environment.
+                </p>
+                <p style="font-size: 1.1rem; line-height: 1.8; color: var(--text); margin-bottom: 1rem;">
+                    <strong>Research & Methodology:</strong> Valentine Lhoest<br>
+                    <strong>Technical Implementation:</strong> João Alfar<br>
+                    <strong>Thesis Defense:</strong> May 15, 2026
+                </p>
+                <p style="font-size: 1rem; line-height: 1.6; color: var(--text-light);">
+                    For inquiries or collaboration opportunities, please contact: <a href="mailto:valentine.lhoest1@gmail.com" style="color: var(--primary); text-decoration: none; font-weight: 600;">valentine.lhoest1@gmail.com</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+  <!-- FAQ SECTION -->
+    <section id="faq" class="problem-section">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-eyebrow">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                        <path d="M9.09 9C9.3251 8.33167 9.78915 7.76811 10.4 7.40913C11.0108 7.05016 11.7289 6.91894 12.4272 7.03871C13.1255 7.15849 13.7588 7.52152 14.2151 8.06353C14.6713 8.60553 14.9211 9.29152 14.92 10C14.92 12 11.92 13 11.92 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 17H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Common Questions
+                </div>
+                <h2 class="section-title">Frequently Asked Questions</h2>
+                <p class="section-description">Everything you need to know about using the carbon calculator</p>
+            </div>
+
+            <div class="faq-container">
+                <details class="faq-item">
+                    <summary class="faq-question">
+                        <span>What is embodied carbon?</span>
+                        <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 9L12 16L5 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </summary>
+                    <div class="faq-answer">
+                        <p>Embodied carbon refers to the total greenhouse gas emissions generated during the extraction, manufacturing, transportation, and construction of building materials and components. This "upfront" carbon represents approximately 11% of global CO₂ emissions and is critical in renovation versus demolition decisions because it accounts for all the carbon already "locked" into existing structures.</p>
+                    </div>
+                </details>
+
+                <details class="faq-item">
+                    <summary class="faq-question">
+                        <span>What is operational carbon?</span>
+                        <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 9L12 16L5 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </summary>
+                    <div class="faq-answer">
+                        <p>Operational carbon encompasses emissions produced during a building's use phase — primarily from heating, cooling, lighting, and appliances. While renewable energy can theoretically reduce operational carbon to zero, it currently represents about 28% of global emissions. Our calculator evaluates how different intervention strategies affect long-term operational efficiency over the building's expected lifespan.</p>
+                    </div>
+                </details>
+
+                <details class="faq-item">
+                    <summary class="faq-question">
+                        <span>When should I renovate instead of rebuilding?</span>
+                        <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 9L12 16L5 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </summary>
+                    <div class="faq-answer">
+                        <p>Renovation is typically preferable when the existing structure has substantial reusable material (high structural integrity), when operational improvements can be achieved through targeted upgrades (insulation, windows, systems), and when the building has a remaining lifespan of 30+ years. Our tool quantifies these trade-offs by comparing whole-life carbon across scenarios, accounting for material reuse rates, operational efficiency gains, climate context, and building lifespan.</p>
+                    </div>
+                </details>
+
+                <details class="faq-item">
+                    <summary class="faq-question">
+                        <span>How accurate are the results?</span>
+                        <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 9L12 16L5 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </summary>
+                    <div class="faq-answer">
+                        <p>This calculator provides indicative results based on research-backed assumptions and industry-standard LCA methodologies. Accuracy depends on input quality and project-specific factors not captured by simplified models. Results should be used for preliminary decision-making and comparative analysis. For regulatory compliance or investment decisions, we recommend conducting a detailed project-specific Life Cycle Assessment (LCA) according to EN 15978 or ISO 14040/14044 standards.</p>
+                    </div>
+                </details>
+
+                <details class="faq-item">
+                    <summary class="faq-question">
+                        <span>Who should use this tool?</span>
+                        <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 9L12 16L5 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </summary>
+                    <div class="faq-answer">
+                        <p>This tool is designed for architects, engineers, sustainability consultants, property developers, facility managers, and policymakers evaluating building intervention strategies. It's particularly useful during early-stage feasibility studies, strategic planning, and stakeholder communication. The framework supports evidence-based decision-making aligned with Net Zero 2050 targets and circular economy principles in the built environment.</p>
+                    </div>
+                </details>
+
+                <details class="faq-item">
+                    <summary class="faq-question">
+                        <span>What data do I need to use the calculator?</span>
+                        <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 9L12 16L5 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </summary>
+                    <div class="faq-answer">
+                        <p>You'll need basic building parameters: gross floor area (m²), expected lifespan post-intervention (years), structural material type (concrete, steel, timber, masonry, or mixed), climate zone (cold, temperate, warm, or hot), embodied energy factor (typical range: 200–800 kgCO₂/m²), and operational energy consumption (10–500 kWh/m²/yr). The tool will calculate and compare all six scenarios automatically (Light, Medium, Deep Renovation vs Code-Compliant, High-Performance, Low-Carbon New Build).</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3>SustainaBuild</h3>
+                <p>Evidence-based decision framework for sustainable building practices. Supporting architects, engineers, and policymakers in achieving net-zero construction goals.</p>
+
+                <div class="sdg-badges">
+                    <div class="sdg-badge" title="SDG 11: Sustainable Cities">11</div>
+                    <div class="sdg-badge" title="SDG 12: Responsible Consumption">12</div>
+                    <div class="sdg-badge" title="SDG 13: Climate Action">13</div>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h4>Tools</h4>
+                <ul>
+                    <li><a href="#calculator">Calculator</a></li>
+                    <li><a href="#methodology">Methodology</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="https://github.com/alfarjoao/sustainability-framework" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+                    <li><a href="https://sustainability-framework.vercel.app" target="_blank" rel="noopener noreferrer">Live Demo</a></li>
+                    <li><a href="#methodology">Documentation</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Contact</h4>
+                <ul>
+                    <li><a href="mailto:valentine.lhoest1@gmail.com">Email</a></li>
+                    <li><a href="https://github.com/alfarjoao/sustainability-framework" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 SustainaBuild. Research by Valentine Lhoest | Development by João Alfar</p>
+        </div>
+    </footer>
+
+    <!-- PDF Generation Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <!-- Custom Scripts -->
+    <script src="js/navigation.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/calculator.js"></script>
+    <script src="js/pdf-export.js"></script>
+    <script src="js/scenarios-info.js"></script>
+</body>
+</html>
