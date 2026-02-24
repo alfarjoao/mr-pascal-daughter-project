@@ -1,6 +1,8 @@
 /* ========================================
    BUILDING SUSTAINABILITY FRAMEWORK
-   Calculator Logic - 7 Scenarios Comparison
+   Calculator Logic - 7 Scenarios (REAL DATA from Valentine Lhoëst)
+   Based on Meeting 2_Data.pdf - February 2026
+   ✅ VERSÃO FINAL CORRIGIDA A 100%
    ======================================== */
 
 // State Management
@@ -8,67 +10,92 @@ let currentStep = 1;
 const totalSteps = 2;
 let formData = {};
 
-// 7 CENÁRIOS COM VALORES PLACEHOLDER (Valentine vai fornecer os reais)
+// ✅ 7 CENÁRIOS COM DADOS REAIS DA VALENTINE
 const scenarioDefaults = {
     'light-renovation': {
-        name: 'Light Renovation',
+        name: 'light-renovation',
         displayName: 'Light Renovation',
-        reuseRate: 0.90,
-        embodiedFactor: 0.15,
-        operationalImprovement: 0.25,
+        reuseRate: 0.90,                    // 85-95% average = 90%
+        embodiedFactor: 0.10,               // 5-15% average = 10%
+        operationalImprovement: 0.25,       // 20-30% average = 25%
+        lifespan: 17.5,                     // 15-20 years average
         category: 'renovation'
     },
     'medium-renovation': {
-        name: 'Medium Renovation',
+        name: 'medium-renovation',
         displayName: 'Medium Renovation',
-        reuseRate: 0.70,
-        embodiedFactor: 0.35,
-        operationalImprovement: 0.40,
+        reuseRate: 0.70,                    // 60-80% average = 70%
+        embodiedFactor: 0.275,              // 20-35% average = 27.5%
+        operationalImprovement: 0.475,      // 40-50% average = 47.5%
+        lifespan: 22.5,                     // 20-25 years average
         category: 'renovation'
     },
     'deep-renovation': {
-        name: 'Deep Renovation',
+        name: 'deep-renovation',
         displayName: 'Deep Renovation',
-        reuseRate: 0.50,
-        embodiedFactor: 0.60,
-        operationalImprovement: 0.55,
+        reuseRate: 0.525,                   // 45-60% average = 52.5%
+        embodiedFactor: 0.45,               // 35-55% average = 45%
+        operationalImprovement: 0.70,       // 65-75% average = 70%
+        lifespan: 30,                       // 25-35 years average
         category: 'renovation'
     },
     'deep-renovation-demolition': {
-        name: 'Deep Renovation + Slight Demolition',
+        name: 'deep-renovation-demolition',
         displayName: 'Deep + Demo',
-        reuseRate: 0.40,
-        embodiedFactor: 0.75,
-        operationalImprovement: 0.60,
+        reuseRate: 0.425,                   // 40-45% average = 42.5%
+        embodiedFactor: 0.55,               // 45-65% average = 55%
+        operationalImprovement: 0.75,       // 70-80% average = 75%
+        lifespan: 35,                       // 30-40 years average
         category: 'renovation'
     },
     'code-compliant-new': {
-        name: 'Code-Compliant New Build',
+        name: 'code-compliant-new',
         displayName: 'Code-Compliant',
-        reuseRate: 0.10,
-        embodiedFactor: 1.50,
-        operationalImprovement: 0.60,
+        reuseRate: 0.025,                   // 0-5% average = 2.5%
+        embodiedFactor: 0.975,              // 95-100% average = 97.5%
+        operationalImprovement: 0.84,       // 80-88% average = 84%
+        lifespan: 40,                       // 40 years
         category: 'newbuild'
     },
     'high-performance-new': {
-        name: 'High-Performance New Build',
+        name: 'high-performance-new',
         displayName: 'High-Performance',
-        reuseRate: 0.05,
-        embodiedFactor: 1.30,
-        operationalImprovement: 0.75,
+        reuseRate: 0.10,                    // 5-15% average = 10%
+        embodiedFactor: 0.825,              // 75-90% average = 82.5%
+        operationalImprovement: 0.94,       // 92-96% average = 94%
+        lifespan: 50,                       // 50 years
         category: 'newbuild'
     },
     'low-carbon-new': {
-        name: 'Low-Carbon New Build',
+        name: 'low-carbon-new',
         displayName: 'Low-Carbon',
-        reuseRate: 0.15,
-        embodiedFactor: 0.90,
-        operationalImprovement: 0.80,
+        reuseRate: 0.225,                   // 15-30% average = 22.5%
+        embodiedFactor: 0.65,               // 55-75% average = 65%
+        operationalImprovement: 0.98,       // 97-99% average = 98%
+        lifespan: 60,                       // 60 years
         category: 'newbuild'
     }
 };
 
-// Material Factors
+// ✅ PROGRAM TYPE BASELINES (kWh/m²/yr) - From Valentine's data
+const programBaselines = {
+    'office': 350,
+    'residential': 250,
+    'institutional': 450,
+    'industrial': 700
+};
+
+// ✅ CLIMATE MULTIPLIERS - Real data from Valentine
+const climateMultipliers = {
+    'temperate': 1.00,
+    'cold': 1.27,
+    'hot-dry': 0.92,
+    'hot-humid': 0.95,
+    'coastal': 0.85,
+    'mountain': 1.13
+};
+
+// Material Factors (optional, can be used for refinement)
 const materialFactors = {
     'concrete': 1.0,
     'steel': 1.3,
@@ -77,20 +104,12 @@ const materialFactors = {
     'mixed': 1.0
 };
 
-// Climate Multipliers
-const climateMultipliers = {
-    'cold': 1.2,
-    'temperate': 1.0,
-    'warm': 0.9,
-    'hot': 1.1
-};
-
-// ✅ MAPEAMENTO "UNKNOWN" → VALORES ESTIMADOS
+// ✅ MAPEAMENTO "UNKNOWN" → VALORES ESTIMADOS (em MJ/m²)
 const embodiedContextMap = {
-    'light-construction': 300,
-    'medium-construction': 500,
-    'heavy-construction': 700,
-    'existing-building': 125
+    'light-construction': 7500,
+    'medium-construction': 9000,
+    'heavy-construction': 10500,
+    'existing-building': 7500
 };
 
 const operationalContextMap = {
@@ -115,6 +134,9 @@ document.addEventListener('DOMContentLoaded', function() {
     setupUnknownLogic();
     setupMaterialDropdown();
     injectAnimationStyles();
+    
+    console.log('✅ Calculator initialized with REAL DATA from Valentine Lhoëst');
+    console.log('📊 7 Scenarios loaded:', Object.keys(scenarioDefaults));
 });
 
 /* ========================================
@@ -493,7 +515,8 @@ function updateButtons() {
 }
 
 /* ========================================
-   CALCULATIONS - 7 SCENARIOS
+   ✅ CALCULATIONS - 7 SCENARIOS (100% CORRIGIDO)
+   Formula da Valentine: Total = Embodied + (Operational × Lifespan × 3.6)
    ======================================== */
 function calculateResults() {
     btnNext.disabled = true;
@@ -510,11 +533,12 @@ function calculateResults() {
 }
 
 function performCalculation() {
+    // ✅ READ FORM INPUTS
     const buildingType = document.getElementById('building-type').value;
     const area = parseFloat(document.getElementById('building-area').value);
-    const lifespan = parseFloat(document.getElementById('lifespan').value);
     const climate = document.getElementById('climate-zone').value;
     
+    // ✅ MATERIAL DROPDOWN
     const materialDropdown = document.getElementById('material-dropdown');
     const materialCheckboxes = materialDropdown.querySelectorAll('input[type="checkbox"]:checked');
     const selectedMaterials = Array.from(materialCheckboxes).map(cb => cb.value);
@@ -523,71 +547,104 @@ function performCalculation() {
         ? selectedMaterials.reduce((sum, mat) => sum + (materialFactors[mat] || 1.0), 0) / selectedMaterials.length
         : 1.0;
     
-    let embodiedEnergy;
+    // ✅ EMBODIED ENERGY BASELINE (MJ/m²)
+    let embodiedEnergyBaseMJ;
     const embodiedEnergyValue = document.getElementById('embodied-energy').value;
     if (embodiedEnergyValue === 'unknown') {
         const embodiedContext = document.getElementById('embodied-context').value;
-        embodiedEnergy = embodiedContextMap[embodiedContext] || 500;
+        embodiedEnergyBaseMJ = embodiedContextMap[embodiedContext] || 9000;
     } else {
-        embodiedEnergy = parseFloat(embodiedEnergyValue);
+        embodiedEnergyBaseMJ = parseFloat(embodiedEnergyValue);
     }
     
-    let operationalEnergy;
+    // ✅ OPERATIONAL ENERGY BASELINE (kWh/m²/yr)
+    // SEMPRE USA O BASELINE DO PROGRAM TYPE (ignora user input se "unknown")
+    let operationalEnergyBaselineKWh = programBaselines[buildingType] || 350;
+    
+    // Se user forneceu um valor específico (não "unknown"), usa esse
     const operationalEnergyValue = document.getElementById('operational-energy').value;
-    if (operationalEnergyValue === 'unknown') {
-        const operationalContext = document.getElementById('operational-context').value;
-        operationalEnergy = operationalContextMap[operationalContext] || 150;
-    } else {
-        operationalEnergy = parseFloat(operationalEnergyValue);
+    if (operationalEnergyValue !== 'unknown' && operationalEnergyValue !== '') {
+        operationalEnergyBaselineKWh = parseFloat(operationalEnergyValue);
     }
     
-    const userReuseRate = parseFloat(document.getElementById('reuse-rate').value) / 100;
+    // ✅ CLIMATE FACTOR
     const climateFactor = climateMultipliers[climate] || 1.0;
-
-    // ✅ CRIAR ARRAY DE CENÁRIOS (NÃO OBJETO)
+    
+    // ✅ APPLY CLIMATE TO BASELINE
+    const operationalEnergyClimate = operationalEnergyBaselineKWh * climateFactor;
+    
+    console.log('📊 INPUTS:', {
+        buildingType,
+        area,
+        climate,
+        climateFactor,
+        selectedMaterials,
+        materialFactor,
+        embodiedEnergyBaseMJ,
+        operationalEnergyBaselineKWh,
+        operationalEnergyClimate
+    });
+    
+    // ✅ CALCULATE 7 SCENARIOS
     const scenariosArray = [];
     
     Object.keys(scenarioDefaults).forEach(scenarioKey => {
         const scenario = scenarioDefaults[scenarioKey];
         
-        const reuseRate = userReuseRate;
-        const embodiedFactor = scenario.embodiedFactor;
-        const operationalImprovement = scenario.operationalImprovement;
-
-        const embodiedCarbon = embodiedEnergy * area * embodiedFactor * materialFactor * (1 - reuseRate);
-        const operationalCarbon = operationalEnergy * (1 - operationalImprovement) * area * climateFactor * lifespan * 0.5;
-        const totalCarbon = embodiedCarbon + operationalCarbon;
-
+        // ✅ EMBODIED ENERGY (MJ) - CORRIGIDO
+        // Formula da Valentine: Embodied = Baseline × EmbodiedFactor × (1 - ReuseRate) × Area
+        const embodiedEnergyPerM2 = embodiedEnergyBaseMJ * scenario.embodiedFactor * (1 - scenario.reuseRate);
+        const embodiedTotalMJ = embodiedEnergyPerM2 * area;
+        
+        // ✅ OPERATIONAL ENERGY (MJ over lifespan) - CORRIGIDO
+        // Formula da Valentine: Operational = Baseline × Climate × (1 - Improvement) × Lifespan × Area × 3.6
+        const operationalKWhPerM2PerYear = operationalEnergyClimate * (1 - scenario.operationalImprovement);
+        const operationalMJPerM2PerYear = operationalKWhPerM2PerYear * 3.6; // Convert kWh → MJ
+        const operationalTotalMJ = operationalMJPerM2PerYear * scenario.lifespan * area;
+        
+        // ✅ TOTAL LIFECYCLE ENERGY (MJ)
+        const totalMJ = embodiedTotalMJ + operationalTotalMJ;
+        
+        console.log(`📊 ${scenario.displayName}:`, {
+            embodiedPerM2: embodiedEnergyPerM2.toFixed(2),
+            embodiedTotal: embodiedTotalMJ.toFixed(0),
+            operationalPerM2Year: operationalKWhPerM2PerYear.toFixed(2),
+            operationalTotal: operationalTotalMJ.toFixed(0),
+            total: totalMJ.toFixed(0)
+        });
+        
         scenariosArray.push({
             name: scenarioKey,
             displayName: scenario.displayName,
             category: scenario.category,
-            embodiedCarbon: Math.round(embodiedCarbon),
-            operationalCarbon: Math.round(operationalCarbon),
-            totalCarbon: Math.round(totalCarbon)
+            lifespan: scenario.lifespan,
+            embodiedCarbon: Math.round(embodiedTotalMJ),
+            operationalCarbon: Math.round(operationalTotalMJ),
+            totalCarbon: Math.round(totalMJ)
         });
     });
-
-    console.log('📊 Calculated 7 scenarios (ARRAY):', scenariosArray);
-
-    // Encontrar melhor renovação e melhor new build
+    
+    console.log('✅ CALCULATED 7 SCENARIOS:', scenariosArray);
+    
+    // ✅ FIND BEST RENOVATION & BEST NEW BUILD
     const renovationScenarios = scenariosArray.filter(s => s.category === 'renovation');
     const newbuildScenarios = scenariosArray.filter(s => s.category === 'newbuild');
-
+    
     const bestRenovation = renovationScenarios.reduce((best, current) => 
         current.totalCarbon < best.totalCarbon ? current : best
     );
-
+    
     const bestNewbuild = newbuildScenarios.reduce((best, current) => 
         current.totalCarbon < best.totalCarbon ? current : best
     );
-
+    
+    // ✅ DECISION
     const decision = bestRenovation.totalCarbon < bestNewbuild.totalCarbon ? 'RENOVATE' : 'DEMOLISH & REBUILD';
     const recommended = decision === 'RENOVATE' ? bestRenovation.displayName : bestNewbuild.displayName;
     const savings = Math.abs(bestRenovation.totalCarbon - bestNewbuild.totalCarbon);
     const savingsPercentage = ((savings / Math.max(bestRenovation.totalCarbon, bestNewbuild.totalCarbon)) * 100).toFixed(1);
-
-    // ✅ RESULTADO COM ARRAY
+    
+    // ✅ RESULTS OBJECT
     const results = {
         decision: decision,
         recommendedScenario: recommended,
@@ -595,22 +652,24 @@ function performCalculation() {
         savingsPercent: savingsPercentage,
         bestRenovation: bestRenovation,
         bestNewbuild: bestNewbuild,
-        allScenarios: scenariosArray,  // ✅ AGORA É ARRAY
+        allScenarios: scenariosArray,
         inputs: {
             buildingType: buildingType,
             buildingArea: area,
-            lifespan: lifespan,
-            embodiedEnergy: embodiedEnergy,
-            operationalEnergy: operationalEnergy,
+            lifespan: bestRenovation.lifespan,
+            embodiedEnergy: embodiedEnergyBaseMJ,
+            operationalEnergy: operationalEnergyBaselineKWh,
             materials: selectedMaterials,
             materialFactor: materialFactor,
             climate: climate,
-            reuseRate: userReuseRate * 100
+            climateFactor: climateFactor
         }
     };
-
-    console.log('✅ Final results (allScenarios is ARRAY):', results);
-
+    
+    console.log('🎯 FINAL RESULTS:', results);
+    console.log('🧪 TEST VALIDATION: For 7500 m², Office, Temperate, 9000 MJ/m² embodied');
+    console.log('   Scenario 4 (Deep+Demo) total should be ~82M-105M MJ');
+    
     displayResults(results);
 }
 
@@ -649,7 +708,7 @@ function displayResults(results) {
     const savingsAmount = document.getElementById('savingsAmount');
     const savingsPercent = document.getElementById('savingsPercent');
     if (savingsAmount) {
-        savingsAmount.textContent = formatNumber(results.savings) + ' tCO₂e';
+        savingsAmount.textContent = formatNumber(results.savings) + ' MJ';
     }
     if (savingsPercent) {
         savingsPercent.textContent = '(' + results.savingsPercent + '%)';
@@ -775,10 +834,16 @@ function injectAnimationStyles() {
 window.calculatorDebug = {
     formData: formData,
     scenarioDefaults: scenarioDefaults,
+    programBaselines: programBaselines,
+    climateMultipliers: climateMultipliers,
     currentStep: () => currentStep,
     validate: () => validateCurrentStep(),
     embodiedContextMap: embodiedContextMap,
     operationalContextMap: operationalContextMap
 };
 
-console.log('✨ Calculator initialized with 7-scenario comparison logic (including Deep Renovation + Slight Demolition)');
+console.log('✅ Calculator initialized with REAL DATA from Valentine Lhoëst (Meeting 2_Data.pdf)');
+console.log('📊 7 Scenarios loaded:', Object.keys(scenarioDefaults));
+console.log('🌍 6 Climate zones:', Object.keys(climateMultipliers));
+console.log('🏢 4 Building types:', Object.keys(programBaselines));
+console.log('🔧 Formula: Embodied × Factor × (1 - Reuse) × Area + Operational × Climate × (1 - Improvement) × Lifespan × Area × 3.6');

@@ -358,7 +358,7 @@
         </div>
     </section>
 
-    <!-- CALCULATOR SECTION (ATUALIZADO COM NOVAS VARIÁVEIS) -->
+  <!-- CALCULATOR SECTION (ATUALIZADO COM DADOS REAIS DA VALENTINE + REUSE RATE) -->
 <section id="calculator" class="calculator-section">
     <div class="section-container">
         <div class="section-header">
@@ -382,19 +382,18 @@
                         <p class="form-section-description">Enter key building characteristics</p>
                     </div>
 
-                    <!-- ✅ NOVA VARIÁVEL: Building Type -->
+                    <!-- ✅ PROGRAM TYPE (NOVO - 4 OPÇÕES DA VALENTINE) -->
                     <div class="form-group">
                         <label class="form-label" for="building-type">
-                            Building Type <span class="required-asterisk">*</span>
+                            Program Type <span class="required-asterisk">*</span>
                         </label>
-                        <span class="form-help">Select the primary use category</span>
+                        <span class="form-help">Primary building use determines operational energy baseline</span>
                         <select id="building-type" name="buildingType" class="form-select" required>
-                            <option value="">Select building type...</option>
-                            <option value="residential">Residential</option>
-                            <option value="commercial">Commercial</option>
-                            <option value="industrial">Industrial</option>
-                            <option value="mixed-use">Mixed-Use</option>
-                            <option value="institutional">Institutional</option>
+                            <option value="">Select program type...</option>
+                            <option value="office">Office/Commercial (350 kWh/m²/yr baseline)</option>
+                            <option value="residential">Residential (250 kWh/m²/yr baseline)</option>
+                            <option value="institutional">Institutional (450 kWh/m²/yr baseline)</option>
+                            <option value="industrial">Industrial (700 kWh/m²/yr baseline)</option>
                         </select>
                         <span class="input-error-message"></span>
                     </div>
@@ -403,7 +402,7 @@
                         <label class="form-label" for="building-area">
                             Building Area <span class="required-asterisk">*</span>
                         </label>
-                        <span class="form-help">Select a range for total gross floor area</span>
+                        <span class="form-help">Total gross floor area (m²)</span>
                         <select id="building-area" name="buildingArea" class="form-select" required>
                             <option value="">Select area...</option>
                             <option value="75">50–100 m²</option>
@@ -417,84 +416,67 @@
                         <span class="input-error-message"></span>
                     </div>
 
+                    <!-- ✅ MATERIAL MULTI-SELECT DROPDOWN (CUSTOM COM CHECKBOXES) -->
                     <div class="form-group">
-                        <label class="form-label" for="lifespan">
-                            Expected Lifespan <span class="required-asterisk">*</span>
+                        <label class="form-label">
+                            Structural Materials <span class="required-asterisk">*</span>
                         </label>
-                        <span class="form-help">Operational lifespan after intervention</span>
-                        <select id="lifespan" name="lifespan" class="form-select" required>
-                            <option value="">Select lifespan...</option>
-                            <option value="15">10–20 years</option>
-                            <option value="30">20–40 years</option>
-                            <option value="50">40–60 years</option>
-                            <option value="75">60–90 years</option>
-                            <option value="95">90–100 years</option>
-                        </select>
+                        <span class="form-help">Select one or multiple materials</span>
+                        
+                        <div class="custom-multiselect" id="material-dropdown">
+                            <div class="multiselect-trigger" tabindex="0">
+                                <span class="multiselect-placeholder">Select materials...</span>
+                                <svg class="multiselect-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M19 9L12 16L5 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            
+                            <div class="multiselect-dropdown" style="display: none;">
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="structuralMaterials" value="concrete">
+                                    <span class="checkbox-custom"></span>
+                                    <span class="checkbox-label">Concrete</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="structuralMaterials" value="steel">
+                                    <span class="checkbox-custom"></span>
+                                    <span class="checkbox-label">Steel</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="structuralMaterials" value="timber">
+                                    <span class="checkbox-custom"></span>
+                                    <span class="checkbox-label">Timber</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="structuralMaterials" value="masonry">
+                                    <span class="checkbox-custom"></span>
+                                    <span class="checkbox-label">Masonry</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" name="structuralMaterials" value="mixed">
+                                    <span class="checkbox-custom"></span>
+                                    <span class="checkbox-label">Mixed/Other</span>
+                                </label>
+                            </div>
+                        </div>
+                        
                         <span class="input-error-message"></span>
                     </div>
 
-          <!-- ✅ MATERIAL MULTI-SELECT DROPDOWN (CUSTOM COM CHECKBOXES) -->
-<div class="form-group">
-    <label class="form-label">
-        Structural Materials <span class="required-asterisk">*</span>
-    </label>
-    <span class="form-help">Click to select one or multiple materials</span>
-    
-    <!-- Custom Dropdown Container -->
-    <div class="custom-multiselect" id="material-dropdown">
-        <!-- Campo que parece um dropdown normal -->
-        <div class="multiselect-trigger" tabindex="0">
-            <span class="multiselect-placeholder">Select materials...</span>
-            <svg class="multiselect-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M19 9L12 16L5 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-        </div>
-        
-        <!-- Dropdown com checkboxes GRANDES (aparece ao clicar) -->
-        <div class="multiselect-dropdown" style="display: none;">
-            <label class="checkbox-item">
-                <input type="checkbox" name="structuralMaterials" value="concrete">
-                <span class="checkbox-custom"></span>
-                <span class="checkbox-label">Concrete</span>
-            </label>
-            <label class="checkbox-item">
-                <input type="checkbox" name="structuralMaterials" value="steel">
-                <span class="checkbox-custom"></span>
-                <span class="checkbox-label">Steel</span>
-            </label>
-            <label class="checkbox-item">
-                <input type="checkbox" name="structuralMaterials" value="timber">
-                <span class="checkbox-custom"></span>
-                <span class="checkbox-label">Timber</span>
-            </label>
-            <label class="checkbox-item">
-                <input type="checkbox" name="structuralMaterials" value="masonry">
-                <span class="checkbox-custom"></span>
-                <span class="checkbox-label">Masonry</span>
-            </label>
-            <label class="checkbox-item">
-                <input type="checkbox" name="structuralMaterials" value="mixed">
-                <span class="checkbox-custom"></span>
-                <span class="checkbox-label">Mixed/Other</span>
-            </label>
-        </div>
-    </div>
-    
-    <span class="input-error-message"></span>
-</div>
-
-
-
+                    <!-- ✅ CLIMATE ZONE (ATUALIZADO - 6 OPÇÕES DA VALENTINE) -->
                     <div class="form-group">
                         <label class="form-label" for="climate-zone">
                             Climate Zone <span class="required-asterisk">*</span>
                         </label>
+                        <span class="form-help">Local climate affects operational energy requirements</span>
                         <select id="climate-zone" name="climateZone" class="form-select" required>
                             <option value="">Select climate...</option>
-                            <option value="cold">Cold</option>
-                            <option value="temperate">Temperate</option>
-                            <option value="warm">Warm</option>
-                            <option value="hot">Hot</option>
+                            <option value="temperate">Temperate (baseline: 1.00×)</option>
+                            <option value="cold">Cold (factor: 1.27×)</option>
+                            <option value="hot-dry">Hot-Dry (factor: 0.92×)</option>
+                            <option value="hot-humid">Hot-Humid (factor: 0.95×)</option>
+                            <option value="coastal">Coastal (factor: 0.85×)</option>
+                            <option value="mountain">Mountain (factor: 1.13×)</option>
                         </select>
                         <span class="input-error-message"></span>
                     </div>
@@ -504,25 +486,21 @@
                 <div class="form-section" data-section="2">
                     <div class="form-section-header">
                         <h3 class="form-section-title">Energy & Carbon Data</h3>
-                        <p class="form-section-description">Provide energy performance metrics</p>
+                        <p class="form-section-description">Provide energy performance metrics (or let us estimate)</p>
                     </div>
 
                     <!-- ✅ EMBODIED ENERGY COM "UNKNOWN" OPTION -->
                     <div class="form-group">
                         <label class="form-label" for="embodied-energy">
-                            Embodied Energy Factor <span class="required-asterisk">*</span>
+                            Embodied Energy Baseline <span class="required-asterisk">*</span>
                         </label>
-                        <span class="form-help">Select typical embodied carbon intensity</span>
+                        <span class="form-help">Total embodied energy of existing building (MJ/m²)</span>
                         <select id="embodied-energy" name="embodiedEnergy" class="form-select" required>
-                            <option value="">Select factor...</option>
+                            <option value="">Select baseline...</option>
                             <option value="unknown">Unknown (help me estimate)</option>
-                            <option value="125">50–200 kgCO₂/m²</option>
-                            <option value="300">200–400 kgCO₂/m²</option>
-                            <option value="500">400–600 kgCO₂/m²</option>
-                            <option value="700">600–800 kgCO₂/m²</option>
-                            <option value="1100">800–1,400 kgCO₂/m²</option>
-                            <option value="2700">1,400–4,000 kgCO₂/m²</option>
-                            <option value="4500">4,000–5,000 kgCO₂/m²</option>
+                            <option value="7500">7,500 MJ/m² (light construction)</option>
+                            <option value="9000">9,000 MJ/m² (medium construction)</option>
+                            <option value="10500">10,500 MJ/m² (heavy construction)</option>
                         </select>
                         <span class="input-error-message"></span>
                     </div>
@@ -532,13 +510,13 @@
                         <label class="form-label" for="embodied-context">
                             Building Context <span class="required-asterisk">*</span>
                         </label>
-                        <span class="form-help">Help us estimate embodied carbon based on construction type</span>
+                        <span class="form-help">Help us estimate embodied energy based on construction type</span>
                         <select id="embodied-context" name="embodiedContext" class="form-select">
                             <option value="">Select context...</option>
-                            <option value="light-construction">Light Construction (timber frame, low mass)</option>
-                            <option value="medium-construction">Medium Construction (masonry, standard)</option>
-                            <option value="heavy-construction">Heavy Construction (concrete frame, high mass)</option>
-                            <option value="existing-building">Existing Building (renovation scenario)</option>
+                            <option value="light-construction">Light Construction (7,500 MJ/m²)</option>
+                            <option value="medium-construction">Medium Construction (9,000 MJ/m²)</option>
+                            <option value="heavy-construction">Heavy Construction (10,500 MJ/m²)</option>
+                            <option value="existing-building">Existing Building (7,500 MJ/m²)</option>
                         </select>
                         <span class="input-error-message"></span>
                     </div>
@@ -546,18 +524,16 @@
                     <!-- ✅ OPERATIONAL ENERGY COM "UNKNOWN" OPTION -->
                     <div class="form-group">
                         <label class="form-label" for="operational-energy">
-                            Operational Energy <span class="required-asterisk">*</span>
+                            Operational Energy Baseline <span class="required-asterisk">*</span>
                         </label>
-                        <span class="form-help">Annual energy consumption per area</span>
+                        <span class="form-help">Annual energy consumption (kWh/m²/yr) - leave as "unknown" to use program type baseline</span>
                         <select id="operational-energy" name="operationalEnergy" class="form-select" required>
                             <option value="">Select consumption...</option>
-                            <option value="unknown">Unknown (help me estimate)</option>
-                            <option value="20">10–30 kWh/m²/yr</option>
-                            <option value="45">30–60 kWh/m²/yr</option>
-                            <option value="80">60–100 kWh/m²/yr</option>
-                            <option value="150">100–200 kWh/m²/yr</option>
-                            <option value="275">200–350 kWh/m²/yr</option>
-                            <option value="425">350–500 kWh/m²/yr</option>
+                            <option value="unknown">Unknown (use program type baseline)</option>
+                            <option value="20">20 kWh/m²/yr (high-performance)</option>
+                            <option value="80">80 kWh/m²/yr (code-compliant)</option>
+                            <option value="150">150 kWh/m²/yr (existing standard)</option>
+                            <option value="275">275 kWh/m²/yr (poor performance)</option>
                         </select>
                         <span class="input-error-message"></span>
                     </div>
@@ -570,22 +546,23 @@
                         <span class="form-help">Help us estimate operational energy based on performance level</span>
                         <select id="operational-context" name="operationalContext" class="form-select">
                             <option value="">Select performance...</option>
-                            <option value="high-performance">High-Performance (Passivhaus, near zero)</option>
-                            <option value="code-compliant">Code-Compliant (meets current standards)</option>
-                            <option value="existing-standard">Existing Building (pre-renovation)</option>
-                            <option value="poor-performance">Poor Performance (old building, no upgrades)</option>
+                            <option value="high-performance">High-Performance (20 kWh/m²/yr)</option>
+                            <option value="code-compliant">Code-Compliant (80 kWh/m²/yr)</option>
+                            <option value="existing-standard">Existing Standard (150 kWh/m²/yr)</option>
+                            <option value="poor-performance">Poor Performance (275 kWh/m²/yr)</option>
                         </select>
                         <span class="input-error-message"></span>
                     </div>
 
+                    <!-- ✅ MATERIAL REUSE RATE (ADICIONADO DE VOLTA) -->
                     <div class="form-group">
                         <label class="form-label" for="reuse-rate">
                             Material Reuse Rate <span class="required-asterisk">*</span>
                         </label>
-                        <span class="form-help">Percentage of existing materials reused</span>
+                        <span class="form-help">Percentage of existing materials retained/reused (0% = full demolition, 90% = maximum retention)</span>
                         <select id="reuse-rate" name="reuseRate" class="form-select" required>
                             <option value="">Select reuse rate...</option>
-                            <option value="0">0% (All New Materials)</option>
+                            <option value="0">0% (Complete Demolition)</option>
                             <option value="10">10%</option>
                             <option value="20">20%</option>
                             <option value="30">30%</option>
@@ -594,7 +571,7 @@
                             <option value="60">60%</option>
                             <option value="70">70%</option>
                             <option value="80">80%</option>
-                            <option value="90">90%</option>
+                            <option value="90">90% (Maximum Retention)</option>
                         </select>
                         <span class="input-error-message"></span>
                     </div>
@@ -620,174 +597,175 @@
     </div>
 </section>
 
-    <!-- Results Section (MANTÉM IGUAL) -->
-    <section id="results" style="display: none;">
-        <div class="container">
+<!-- RESULTS SECTION (ATUALIZADO PARA MJ EM VEZ DE tCO₂e) -->
+<section id="results" style="display: none;">
+    <div class="container">
+        
+        <!-- Compact Header -->
+        <div class="results-compact-header">
+            <div class="decision-badge-compact" id="decisionBadge">
+                <span class="decision-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+                <div>
+                    <span class="decision-text" id="decisionText">RENOVATE</span>
+                    <p class="decision-subtitle" id="resultsTitle">Medium Renovation is the better choice</p>
+                </div>
+            </div>
             
-            <!-- Compact Header -->
-            <div class="results-compact-header">
-                <div class="decision-badge-compact" id="decisionBadge">
-                    <span class="decision-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </span>
-                    <div>
-                        <span class="decision-text" id="decisionText">RENOVATE</span>
-                        <p class="decision-subtitle" id="resultsTitle">Medium Renovation is the better choice</p>
-                    </div>
-                </div>
-                
-                <div class="savings-compact">
-                    <span class="savings-label">Carbon Savings</span>
-                    <span class="savings-value">
-                        <strong id="savingsAmount">5,700 tCO₂e</strong>
-                        <span class="savings-percent" id="savingsPercent">(31%)</span>
-                    </span>
-                </div>
+            <div class="savings-compact">
+                <span class="savings-label">Energy Savings</span>
+                <span class="savings-value">
+                    <strong id="savingsAmount">5,700 MJ</strong>
+                    <span class="savings-percent" id="savingsPercent">(31%)</span>
+                </span>
             </div>
-
-            <!-- Quick Stats -->
-            <div class="results-quick-stats">
-                <div class="quick-stat">
-                    <span class="stat-icon">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M21 16V8C20.9996 7.64927 20.9071 7.30481 20.7315 7.00116C20.556 6.69751 20.3037 6.44536 20 6.27L13 2.27C12.696 2.09446 12.3511 2.00205 12 2.00205C11.6489 2.00205 11.304 2.09446 11 2.27L4 6.27C3.69626 6.44536 3.44398 6.69751 3.26846 7.00116C3.09294 7.30481 3.00036 7.64927 3 8V16C3.00036 16.3507 3.09294 16.6952 3.26846 16.9988C3.44398 17.3025 3.69626 17.5546 4 17.73L11 21.73C11.304 21.9055 11.6489 21.9979 12 21.9979C12.3511 21.9979 12.696 21.9055 13 21.73L20 17.73C20.3037 17.5546 20.556 17.3025 20.7315 16.9988C20.9071 16.6952 20.9996 16.3507 21 16Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <polyline points="7.5 4.21 12 6.81 16.5 4.21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <polyline points="7.5 19.79 7.5 14.6 3 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <polyline points="21 12 16.5 14.6 16.5 19.79" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <polyline points="3.27 6.96 12 12.01 20.73 6.96" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <line x1="12" y1="22.08" x2="12" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </span>
-                    <div class="stat-content">
-                        <span class="stat-label">Best Renovation</span>
-                        <span class="stat-value" id="renovationTotal">12,500</span>
-                        <span class="stat-unit">tCO₂e</span>
-                    </div>
-                </div>
-                
-                <div class="quick-stat-divider">vs</div>
-                
-                <div class="quick-stat">
-                    <span class="stat-icon">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <polyline points="9 22 9 12 15 12 15 22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </span>
-                    <div class="stat-content">
-                        <span class="stat-label">Best New Build</span>
-                        <span class="stat-value" id="newbuildTotal">18,200</span>
-                        <span class="stat-unit">tCO₂e</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Expandable Details -->
-            <details class="results-details" open>
-                <summary>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M18 20V10M12 20V4M6 20V14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    Detailed Breakdown
-                </summary>
-                
-                <div class="details-grid">
-                    <!-- Renovation Breakdown -->
-                    <div class="breakdown-card">
-                        <h4>Best Renovation Carbon</h4>
-                        <div class="breakdown-item">
-                            <span>Embodied:</span>
-                            <strong id="renovationEmbodied">2,500</strong> tCO₂e
-                        </div>
-                        <div class="breakdown-item">
-                            <span>Operational:</span>
-                            <strong id="renovationOperational">10,000</strong> tCO₂e
-                        </div>
-                    </div>
-                    
-                    <!-- New Build Breakdown -->
-                    <div class="breakdown-card">
-                        <h4>Best New Build Carbon</h4>
-                        <div class="breakdown-item">
-                            <span>Embodied:</span>
-                            <strong id="newbuildEmbodied">8,200</strong> tCO₂e
-                        </div>
-                        <div class="breakdown-item">
-                            <span>Operational:</span>
-                            <strong id="newbuildOperational">10,000</strong> tCO₂e
-                        </div>
-                    </div>
-                </div>
-            </details>
-
-            <!-- Charts in Tabs -->
-            <div class="charts-tabs">
-                <div class="tabs-header">
-                    <button class="tab-btn active" data-tab="comparison">Comparison (7 Scenarios)</button>
-                    <button class="tab-btn" data-tab="breakdown">Breakdown</button>
-                    <button class="tab-btn" data-tab="timeline">Timeline</button>
-                    <button class="tab-btn" data-tab="table">Table</button>
-                </div>
-                
-                <div class="tabs-content">
-                    <div class="tab-pane active" id="tab-comparison">
-                        <canvas id="barChart"></canvas>
-                    </div>
-                    <div class="tab-pane" id="tab-breakdown">
-                        <canvas id="pieChart"></canvas>
-                    </div>
-                    <div class="tab-pane" id="tab-timeline">
-                        <canvas id="lineChart"></canvas>
-                    </div>
-                    <div id="tab-table" class="tab-pane">
-    <div class="table-wrapper">
-        <table id="comparisonTable">
-            <thead>
-                <tr>
-                    <th>Metric</th>
-                    <th>Light<br>Renovation</th>
-                    <th>Medium<br>Renovation</th>
-                    <th>Deep<br>Renovation</th>
-                    <th>Deep + Demo</th>
-                    <th>Code-Compliant<br>New</th>
-                    <th>High-Performance<br>New</th>
-                    <th>Low-Carbon<br>New</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Gerado dinamicamente -->
-            </tbody>
-        </table>
-    </div>
-</div>
-
-                </div>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="results-actions-compact">
-                <button class="btn btn-primary" id="downloadPdfBtn">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    Download PDF
-                </button>
-                <button class="btn btn-secondary" onclick="location.reload()">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 4V10H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M23 20V14H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M20.49 9C19.9828 7.56678 19.1209 6.28536 17.9845 5.27542C16.8482 4.26548 15.4745 3.55976 13.9917 3.22426C12.5089 2.88875 10.9652 2.93434 9.50481 3.35677C8.04437 3.77921 6.71475 4.56471 5.64 5.64L1 10M23 14L18.36 18.36C17.2853 19.4353 15.9556 20.2208 14.4952 20.6432C13.0348 21.0657 11.4911 21.1112 10.0083 20.7757C8.52547 20.4402 7.1518 19.7345 6.01547 18.7246C4.87913 17.7146 4.01717 16.4332 3.51 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    New Analysis
-                </button>
-            </div>
-
         </div>
-    </section>
+
+        <!-- Quick Stats -->
+        <div class="results-quick-stats">
+            <div class="quick-stat">
+                <span class="stat-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 16V8C20.9996 7.64927 20.9071 7.30481 20.7315 7.00116C20.556 6.69751 20.3037 6.44536 20 6.27L13 2.27C12.696 2.09446 12.3511 2.00205 12 2.00205C11.6489 2.00205 11.304 2.09446 11 2.27L4 6.27C3.69626 6.44536 3.44398 6.69751 3.26846 7.00116C3.09294 7.30481 3.00036 7.64927 3 8V16C3.00036 16.3507 3.09294 16.6952 3.26846 16.9988C3.44398 17.3025 3.69626 17.5546 4 17.73L11 21.73C11.304 21.9055 11.6489 21.9979 12 21.9979C12.3511 21.9979 12.696 21.9055 13 21.73L20 17.73C20.3037 17.5546 20.556 17.3025 20.7315 16.9988C20.9071 16.6952 20.9996 16.3507 21 16Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <polyline points="7.5 4.21 12 6.81 16.5 4.21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <polyline points="7.5 19.79 7.5 14.6 3 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <polyline points="21 12 16.5 14.6 16.5 19.79" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <line x1="12" y1="22.08" x2="12" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+                <div class="stat-content">
+                    <span class="stat-label">Best Renovation</span>
+                    <span class="stat-value" id="renovationTotal">12,500</span>
+                    <span class="stat-unit">MJ</span>
+                </div>
+            </div>
+            
+            <div class="quick-stat-divider">vs</div>
+            
+            <div class="quick-stat">
+                <span class="stat-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <polyline points="9 22 9 12 15 12 15 22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+                <div class="stat-content">
+                    <span class="stat-label">Best New Build</span>
+                    <span class="stat-value" id="newbuildTotal">18,200</span>
+                    <span class="stat-unit">MJ</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Expandable Details -->
+        <details class="results-details" open>
+            <summary>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 20V10M12 20V4M6 20V14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Detailed Breakdown
+            </summary>
+            
+            <div class="details-grid">
+                <!-- Renovation Breakdown -->
+                <div class="breakdown-card">
+                    <h4>Best Renovation Energy</h4>
+                    <div class="breakdown-item">
+                        <span>Embodied:</span>
+                        <strong id="renovationEmbodied">2,500</strong> MJ
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Operational:</span>
+                        <strong id="renovationOperational">10,000</strong> MJ
+                    </div>
+                </div>
+                
+                <!-- New Build Breakdown -->
+                <div class="breakdown-card">
+                    <h4>Best New Build Energy</h4>
+                    <div class="breakdown-item">
+                        <span>Embodied:</span>
+                        <strong id="newbuildEmbodied">8,200</strong> MJ
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Operational:</span>
+                        <strong id="newbuildOperational">10,000</strong> MJ
+                    </div>
+                </div>
+            </div>
+        </details>
+
+        <!-- Charts in Tabs -->
+        <div class="charts-tabs">
+            <div class="tabs-header">
+                <button class="tab-btn active" data-tab="comparison">Comparison (7 Scenarios)</button>
+                <button class="tab-btn" data-tab="breakdown">Breakdown</button>
+                <button class="tab-btn" data-tab="timeline">Timeline</button>
+                <button class="tab-btn" data-tab="table">Table</button>
+            </div>
+            
+            <div class="tabs-content">
+                <div class="tab-pane active" id="tab-comparison">
+                    <canvas id="barChart"></canvas>
+                </div>
+                <div class="tab-pane" id="tab-breakdown">
+                    <canvas id="pieChart"></canvas>
+                </div>
+                <div class="tab-pane" id="tab-timeline">
+                    <canvas id="lineChart"></canvas>
+                </div>
+                <div id="tab-table" class="tab-pane">
+                    <div class="table-wrapper">
+                        <table id="comparisonTable">
+                            <thead>
+                                <tr>
+                                    <th>Metric</th>
+                                    <th>Light<br>Renovation</th>
+                                    <th>Medium<br>Renovation</th>
+                                    <th>Deep<br>Renovation</th>
+                                    <th>Deep + Demo</th>
+                                    <th>Code-Compliant<br>New</th>
+                                    <th>High-Performance<br>New</th>
+                                    <th>Low-Carbon<br>New</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Gerado dinamicamente pelo charts.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="results-actions-compact">
+            <button class="btn btn-primary" id="downloadPdfBtn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Download PDF
+            </button>
+            <button class="btn btn-secondary" onclick="location.reload()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1 4V10H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M23 20V14H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M20.49 9C19.9828 7.56678 19.1209 6.28536 17.9845 5.27542C16.8482 4.26548 15.4745 3.55976 13.9917 3.22426C12.5089 2.88875 10.9652 2.93434 9.50481 3.35677C8.04437 3.77921 6.71475 4.56471 5.64 5.64L1 10M23 14L18.36 18.36C17.2853 19.4353 15.9556 20.2208 14.4952 20.6432C13.0348 21.0657 11.4911 21.1112 10.0083 20.7757C8.52547 20.4402 7.1518 19.7345 6.01547 18.7246C4.87913 17.7146 4.01717 16.4332 3.51 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                New Analysis
+            </button>
+        </div>
+
+    </div>
+</section>
+
+
 
 <!-- Methodology Section (MANTÉM IGUAL) -->
 <section id="methodology" class="methodology-section">
