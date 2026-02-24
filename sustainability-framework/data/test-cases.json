@@ -1,0 +1,73 @@
+{
+  "testCases": [
+    {
+      "id": "case-001",
+      "name": "Medium Office Building - Brussels",
+      "description": "Typical 1980s office building requiring energy retrofit",
+      "inputs": {
+        "scenario": "deep-renovation",
+        "buildingArea": 3500,
+        "lifespan": 40,
+        "embodiedEnergy": 650,
+        "operationalEnergy": 180,
+        "structuralMaterial": "concrete",
+        "climateZone": "temperate",
+        "reuseRate": null
+      },
+      "expectedResults": {
+        "decision": "RENOVATE",
+        "renovationTotal": "TBD - awaiting Valentine's formula validation",
+        "newBuildTotal": "TBD - awaiting Valentine's formula validation"
+      },
+      "notes": "Baseline test case for deep renovation scenario"
+    },
+    {
+      "id": "case-002",
+      "name": "Small Residential Building - Lisbon",
+      "description": "1970s apartment block with structural issues",
+      "inputs": {
+        "scenario": "light-renovation",
+        "buildingArea": 1200,
+        "lifespan": 50,
+        "embodiedEnergy": 500,
+        "operationalEnergy": 120,
+        "structuralMaterial": "masonry",
+        "climateZone": "warm",
+        "reuseRate": 85
+      },
+      "expectedResults": {
+        "decision": "TBD",
+        "renovationTotal": "TBD",
+        "newBuildTotal": "TBD"
+      },
+      "notes": "Test case for warm climate with custom reuse rate"
+    },
+    {
+      "id": "case-003",
+      "name": "Industrial Warehouse - Stockholm",
+      "description": "Large steel-frame warehouse from 1960s",
+      "inputs": {
+        "scenario": "new-build",
+        "buildingArea": 8000,
+        "lifespan": 30,
+        "embodiedEnergy": 750,
+        "operationalEnergy": 95,
+        "structuralMaterial": "steel",
+        "climateZone": "cold",
+        "reuseRate": null
+      },
+      "expectedResults": {
+        "decision": "TBD",
+        "renovationTotal": "TBD",
+        "newBuildTotal": "TBD"
+      },
+      "notes": "Test case for cold climate with high embodied carbon material"
+    }
+  ],
+  "validationNotes": [
+    "These test cases are placeholders pending Valentine's methodology validation",
+    "Expected results will be filled once real calculation formulas are confirmed",
+    "Each case tests different combinations of climate, material, and scenario",
+    "Cases should cover edge cases: very small buildings (<500m²), very large (>10,000m²), extreme climates"
+  ]
+}

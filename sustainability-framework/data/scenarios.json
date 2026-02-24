@@ -1,0 +1,77 @@
+{
+  "light-renovation": {
+    "id": "light-renovation",
+    "name": "Light Renovation",
+    "description": "Minimal intervention with maximum material reuse. Suitable for buildings in good structural condition requiring mostly cosmetic updates.",
+    "reuseRate": 90,
+    "embodiedFactor": 0.15,
+    "operationalImprovement": 0.25,
+    "typicalApplications": [
+      "Buildings less than 30 years old",
+      "Good structural integrity",
+      "Minor facade improvements",
+      "Interior refurbishment"
+    ],
+    "interventions": [
+      "Facade cleaning and repairs",
+      "Window upgrades (thermal improvement)",
+      "Interior finishes renewal",
+      "HVAC system optimization",
+      "Lighting upgrades to LED"
+    ],
+    "estimatedCost": "Low (€200-400/m²)",
+    "timeline": "3-6 months",
+    "carbonSavingsPotential": "25-30% reduction in operational carbon"
+  },
+  "deep-renovation": {
+    "id": "deep-renovation",
+    "name": "Deep Renovation",
+    "description": "Comprehensive renovation with significant structural modifications, balanced material reuse, and substantial energy performance improvements.",
+    "reuseRate": 50,
+    "embodiedFactor": 0.50,
+    "operationalImprovement": 0.50,
+    "typicalApplications": [
+      "Buildings 30-50 years old",
+      "Moderate structural wear",
+      "Significant energy inefficiency",
+      "Functional layout changes needed"
+    ],
+    "interventions": [
+      "Structural reinforcement",
+      "Complete facade thermal insulation (ETICS)",
+      "Window and door replacement",
+      "HVAC system replacement",
+      "Roof insulation and waterproofing",
+      "Internal layout modifications"
+    ],
+    "estimatedCost": "Medium (€500-800/m²)",
+    "timeline": "6-12 months",
+    "carbonSavingsPotential": "50-60% reduction in operational carbon"
+  },
+  "new-build": {
+    "id": "new-build",
+    "name": "Demolish & New Build",
+    "description": "Complete demolition and reconstruction. Highest embodied carbon impact but maximum operational efficiency with modern building standards.",
+    "reuseRate": 10,
+    "embodiedFactor": 1.50,
+    "operationalImprovement": 0.70,
+    "typicalApplications": [
+      "Buildings over 50 years old",
+      "Severe structural damage",
+      "Non-compliant with modern codes",
+      "Complete functional obsolescence"
+    ],
+    "interventions": [
+      "Complete demolition (with material recovery)",
+      "New foundations",
+      "Modern structural system",
+      "High-performance envelope",
+      "Advanced HVAC systems",
+      "Renewable energy integration",
+      "Smart building systems"
+    ],
+    "estimatedCost": "High (€1,200-2,000/m²)",
+    "timeline": "12-24 months",
+    "carbonSavingsPotential": "70-80% reduction in operational carbon"
+  }
+}
